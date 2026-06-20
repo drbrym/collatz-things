@@ -1,7 +1,7 @@
 # The Exponentially Decayed Bit Potential for the $3x+1$ Map
 
 **Building on:** `recharge_nogo.md`, `potential_attack_notes.md`
-**Status:** A candidate potential. Exact proof of *recharge-step* descent (Theorem 1) + an empirical epoch-monotonicity sweep (0 failures to $10^7$). It is **not** a Lyapunov solution and **not** a proof of the Collatz conjecture — see the caveat in §4.
+**Status:** Proved recharge-family result + finite epoch certificates. It is **not** a Lyapunov solution and **not** a proof of the Collatz conjecture.
 **License:** CC-BY 4.0
 
 ---
@@ -22,7 +22,7 @@ $$
 g_r(x) \;=\; \sum_{i=0}^{\infty} r^i b_i(x), \qquad b_i(x) \in \{0, 1\}, \quad r \in (0, 1).
 $$
 
-Because $r < 1$, the fuel contribution is **uniformly bounded** for all integers by $\frac{1}{1-r}$. This uniform bound guarantees that a recharge step (which always drops the value of $x$ by a significant factor) strictly decreases the potential. Finally, we report that a large-scale computational sweep (the first $1{,}000{,}000$ odd integers under $c=0.2, r=0.2$, extended to $10^7$) yields **exactly zero epoch-descent failures**. We are careful in §4 about what this does and does not show: the epoch monotonicity is carried by the $\log_2 x$ term (since $x_{\text{end}}<x_0$ by definition of an epoch), not by the fuel term, so this is a recharge-safe *candidate*, not a global Lyapunov function.
+Because $r < 1$, the fuel contribution is **uniformly bounded** for all integers by $\frac{1}{1-r}$. This uniform bound guarantees that a recharge step (which always drops the value of $x$ by a significant factor) strictly decreases the potential. Finally, we report that a large-scale computational sweep (all odd integers $x\le10^6$ under $c=0.2, r=0.2$) yields **exactly zero epoch-descent failures**. We are careful in §4 about what this does and does not show: the epoch monotonicity is carried by the $\log_2 x$ term (since $x_{\text{end}}<x_0$ by definition of an epoch), not by the fuel term, so this is a recharge-safe *candidate*, not a global Lyapunov function.
 
 ---
 
@@ -64,26 +64,36 @@ c \;<\; \log_2\left(\frac{4}{3}\right) (1-r) \;\approx\; 0.415037\,(1-r),
 $$
 the recharge step strictly decreases the potential: $P_{c, r}(f(x_m)) < P_{c, r}(x_m)$ for all $m$.
 
-*Proof.* The value ratio for the recharge step is:
+*Proof.* The value ratio is
 $$
-\frac{f(x_m)}{x_m} \;=\; \frac{3(2^m-1)}{2^{m+2}-5} \;<\; \frac{3}{4}.
+\frac{f(x_m)}{x_m}=\frac{3(2^m-1)}{2^{m+2}-5}.
 $$
-Taking the logarithm:
+It approaches $3/4$ from above, not below. For every $m\ge3$ it is at most
+$7/9$, because
 $$
-\Delta \log_2 \;=\; \log_2(f(x_m)) - \log_2(x_m) \;<\; \log_2\left(\frac{3}{4}\right) \;\approx\; -0.415037.
+9\cdot3(2^m-1)\le7(2^{m+2}-5)
+\iff 2^m\ge8.
 $$
-The change in fuel $\Delta g_r = g_r(f(x_m)) - g_r(x_m)$ is strictly bounded by the maximum possible fuel value:
+Hence $\Delta\log_2\le\log_2(7/9)<0$.
+
+Moreover $x_m$ is odd, so $g_r(x_m)\ge1$, while
+$g_r(2^m-1)=\sum_{i=0}^{m-1}r^i$. Therefore
 $$
-\Delta g_r \;<\; g_r(f(x_m)) \;\le\; \sum_{i=0}^{m-1} r^i \;<\; \frac{1}{1-r}.
+\Delta g_r
+\le\sum_{i=0}^{m-1}r^i-1
+<\frac{r}{1-r}.
 $$
-Therefore, the change in potential is:
+Thus
 $$
-\Delta P \;=\; \Delta \log_2 + c \Delta g_r \;<\; \log_2\left(\frac{3}{4}\right) + \frac{c}{1-r}.
+\Delta P<\log_2\left(\frac79\right)+c\frac{r}{1-r}.
 $$
-To guarantee strict descent ($\Delta P < 0$), we require:
+The sufficient condition
 $$
-\log_2\left(\frac{3}{4}\right) + \frac{c}{1-r} \;<\; 0 \;\implies\; c \;<\; \log_2\left(\frac{4}{3}\right)(1-r). \qquad \blacksquare
+c<\log_2\left(\frac97\right)\frac{1-r}{r}
 $$
+therefore proves descent. For $0<r\le1/2$, the theorem's stated bound
+$c<\log_2(4/3)(1-r)$ implies this condition because
+$r\log_2(4/3)<\log_2(9/7)$. $\qquad\blacksquare$
 
 **Remark (Neutralizing the Obstruction).** Choosing $r=0.2$ gives the threshold $c < 0.332$. Choosing $r=0.25$ gives the threshold $c < 0.311$. Under these parameter regimes, a recharge step can *never* cause the potential to grow, no matter how large the trailing run of ones becomes.
 
@@ -102,7 +112,7 @@ The verification script `verify_exponential_potential.py` tracks the potential c
   $$
   P_{0.2, 0.2}(x_{\text{end}}) \;<\; P_{0.2, 0.2}(x_0).
   $$
-* **Worst-Case Epoch Delta:** The maximum (least negative) potential change observed in the sweep was $-0.018120$ occurring on $x_0 = 35295$ (epoch length $= 41$ steps).
+* **Worst-Case Epoch Delta:** The maximum (least negative) potential change observed in the sweep was $-0.008730$ occurring on $x_0 = 71451$ (epoch length $= 41$ steps).
 
 This is robust empirical evidence that $P_{0.2, 0.2}$ is **epoch-monotone** in the tested range — *not* that it is a global Lyapunov function (see §4).
 
@@ -115,14 +125,14 @@ This is robust empirical evidence that $P_{0.2, 0.2}$ is **epoch-monotone** in t
 * The guaranteed recharge descent on the family $x_m \to 2^m-1$ (Theorem 1).
 
 **Verified by exhaustive computation:**
-* $100\%$ strict descent across every first-descent epoch for all odd $x \le 10^6$ under multiple parameter sets (e.g., $c=0.2, r=0.2$ and $c=0.15, r=0.25$).
+* $100\%$ strict descent across every first-descent epoch for all odd $x \le 10^6$ at $c=0.2,\,r=0.2$ (the configuration in the accompanying verifier), with the same zero-failure outcome at every other tested $c\in\{0.05, 0.15, 0.30\}$ at $r=0.2$.
 
 **Not proved (open):**
 * A global proof that $P_{c, r}(x_{\text{end}}) < P_{c, r}(x_0)$ holds for **all** integers $x_0$. While the recharge steps are bounded by Theorem 1, proving that the burn and subsequent chaotic descent always result in a net potential drop requires establishing that the carry dynamics under multiplication-by-3 cannot build up a highly dense LSB configuration that offsets the logarithmic descent.
 
 **Caveat — what the epoch sweep does *not* show.** The epoch-monotonicity is *driven by the bare $\log_2 x$ term*, not by the fuel potential. Two observations make this precise:
 1. $x_{\text{end}}<x_0$ holds **by definition** of a first-descent epoch, so $\log_2 x_{\text{end}}-\log_2 x_0<0$ for free; the fuel term $c\,\Delta g_r\in(-c/(1-r),\,c/(1-r))$ is a bounded perturbation on top.
-2. Empirically the margin *worsens* as $c$ grows — at the worst-case $x=6{,}308{,}635$ the epoch delta is $-0.0145$ at $c=0.05$ but only $-0.0044$ at $c=0.30$. So $g_r$ **erodes** the margin rather than supplying it; as $c\to0$ the statement degenerates to "the value descends over an epoch," which is the finite-window descent already established to $10^6$ in `Mod8_Rail_Descent.md` §5.
+2. Empirically the margin *worsens* as $c$ grows — at the worst-case $x=71451$ the epoch delta is $-0.0145$ at $c=0.05$ but only $-0.0049$ at $c=0.30$. So $g_r$ **erodes** the margin rather than supplying it; as $c\to0$ the statement degenerates to "the value descends over an epoch," which is the finite-window descent already established to $10^6$ in `Mod8_Rail_Descent.md` §5.
 
 Consequently this potential does **not** bypass the genuine obstruction, which is *per-step / global* control: a burn step ($v_2(3x+1)=1$) raises $\log_2 x$ by $\approx0.585$, far more than the $\le c/(1-r)=0.25$ the bounded fuel term can ever move, so $P$ is not a per-step supermartingale. What this model *does* deliver is a recharge-safe candidate — Theorem 1 genuinely repairs the single failure mode that sank the $\tau$-only potential of `recharge_nogo.md`.
 
