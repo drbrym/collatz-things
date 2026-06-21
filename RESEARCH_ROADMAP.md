@@ -489,10 +489,10 @@ run. Through odd \(n\le5001\), only \(46\) of roughly \(341{,}551\) active
 states with \(K\ge8\) have reduced-height ratio at most \(0.75\). The longest
 observed one-run has length \(17\), but its enemy constant has generic height.
 
-The next theorem target is an enemy-coordinate dichotomy: low-height
-coordinates are eliminated by Baker non-shadowing; high-height coordinates
-must force surplus recovery or an arithmetic collision usable by the merger
-programme.
+This suggested an enemy-coordinate dichotomy, but the subsequent episode
+test below refuted its most local form. Low-height coordinates remain
+Baker-applicable; no universal high-height recovery-or-collision law is
+currently established.
 
 ### Enemy-episode test and strategic revision
 
@@ -515,9 +515,9 @@ programme is revised to:
 4. seek cumulative, adaptive surplus blocks on the residual primitive tails,
    with windows bounded independently of \(\sigma_n\).
 
-The immediate next target is the algebra of gap-\(2\), gap-\(4\), and
-gap-\(6\) mergers through the scalar collision condition
-\(3A+2^{E+1}=3B+2^{F+1}\).
+The small-gap merger algebra proposed here was subsequently completed in
+`repunit_gap_merger_analysis.md`; the later synchronization-tree and
+collision-defect sections record both its exact consequences and its limits.
 
 The overarching target remains:
 
@@ -536,9 +536,10 @@ For the explicit enemy branch \((2,1^{K-1})\), ordinary size gives
 K<\log_2(3)(n+1)-2.
 \]
 
-Thus this branch cannot shadow through \(3n\) steps. The next target is to
-extend this Archimedean-versus-2-adic argument from one closed-form branch to
-general low-surplus valuation words.
+Thus this branch cannot shadow through \(3n\) steps. The Baker-height census
+shows why extending the same argument to generic low-surplus words is not
+automatic: their reduced enemy constants normally have height comparable to
+the accumulated valuation.
 
 ---
 
@@ -611,19 +612,42 @@ episodes, not from trailing-one fuel consumption alone.
 Thus the finite rail-avoiding sets form a nested, geometrically shrinking
 family of exponent classes.
 
-### Possible targets
+### Completed geometric targets
 
-1. Describe the inverse-limit survivor set in \(\mathbb Z_2\).
-2. Determine its Hausdorff dimension under the natural 2-adic metric.
-3. Describe its symbolic dynamics or construct an explicit finite-state
-   presentation if one exists.
-4. Determine whether any positive odd integer exponent belongs to the infinite
-   survivor intersection.
+`repunit_rail5_survivor_geometry.md` completes the first three targets.
+For arbitrary odd \(2\)-adic starting states, the survivor set is the
+self-similar attractor
+
+\[
+\mathcal S=\phi_1(\mathcal S)\mathbin{\dot\cup}\phi_2(\mathcal S),
+\qquad
+\phi_e(y)=\frac{2^e y-1}{3},
+\quad e\in\{1,2\}.
+\]
+
+It is conjugate to the full shift on \(\{1,2\}^{\mathbb N}\), has Haar
+measure zero, and has Hausdorff dimension
+
+\[
+\dim_H\mathcal S
+=\log_2\left(\frac{1+\sqrt5}{2}\right).
+\]
+
+The base-\(9\) repunit isometry transfers the same measure and dimension
+statements to the \(2\)-adic repunit-index survivor set.
+
+### Remaining arithmetic target
+
+Determine whether the repunit-index survivor set contains any positive odd
+integer \(n>1\). The trivial index \(n=1\) survives forever because
+\(a_1=1\) is fixed by the accelerated map.
 
 ### Expected value
 
-The first three targets may produce clean mathematics. The fourth would prove
-universal rail-5 hitting and is substantially harder.
+The completed geometric theorem gives a clean exact description of the
+exceptional set but does not settle its intersection with positive integers.
+Excluding every positive \(n>1\) would prove universal rail-\(5\) hitting and
+is substantially harder.
 
 ### Limitation
 
@@ -818,8 +842,126 @@ immediate proof focus should return to cumulative surplus on primitive tails.
 Synchronization families and Baker non-shadowing remain auxiliary mechanisms
 that remove structured nonprimitive or low-height cases.
 
-The immediate next task is:
+## Research checkpoint — 20 June 2026
 
-> Reanalyse primitive-tail surplus using adaptive record blocks whose
-> endpoints are defined by surplus minima and new maxima, rather than fixed
-> lengths or valuation-one episodes.
+The work in this round has real mathematical value:
+
+- the affine correction has been removed as a substantive obstruction;
+- merge inheritance gives a valid strong-induction reduction;
+- the fixed 256-block strategy has an explicit \(2\)-adic obstruction;
+- Baker non-shadowing eliminates the structured fixed-\(7\) enemy branch;
+- first-merger collision shells and several infinite synchronization
+  families are proved exactly;
+- terminal-payout episodes and compressed collision-defect dynamics have
+  been tested and ruled out as standalone proof mechanisms.
+
+However, no current route is theorem-ready for the universal repunit-tail
+bound. In particular, beginning another adaptive-block census now would risk
+repackaging recovery that is already guaranteed after the empirically known
+first descent.
+
+The programme should pause here rather than continue by inertia.
+
+On resumption, require one precise new arithmetic lemma before launching a
+large experiment. Two credible restart questions are:
+
+1. Rewrite the collision shells directly in aligned odd-state coordinates:
+   a one-step coalescence with valuation gap \(2h\) is equivalent to an
+   affine relation
+   \[
+   X=4^hY+\frac{4^h-1}{3}.
+   \]
+   Determine whether aligned repunit-tail pairs have an order, crossing, or
+   congruence mechanism that forces one of these affine collision rails.
+2. At new record minima of primitive-tail surplus, prove a lower bound on the
+   least positive exponent representative selected by the exact valuation
+   prefix. The bound must use primitivity or correction-state structure, not
+   modulus size or Kolmogorov complexity alone.
+
+Until one of these can be stated with explicit quantifiers and a plausible
+proof mechanism, further computation should be regarded as optional
+exploration rather than the main programme.
+
+### Resumption: extremal storage coordinate
+
+`repunit_extremal_principle.md` develops the second restart question without
+launching a broad census. If
+
+\[
+D_K=K\log_2 3-E_K,
+\qquad
+Z_K=\frac{A_K+2^{E_K+1}}{2^{E_K+1}},
+\]
+
+then every strict new record of \(D_K\) occurs on a valuation-one step, and
+
+\[
+Z_{K+1}=1+\frac{3Z_K-2}{2^{e_K}}.
+\]
+
+In particular, during every valuation-one run,
+
+\[
+D_K-\log_2 Z_K
+\]
+
+is exactly constant. The deficit accumulated by an extremal run is stored
+bit-for-bit in the normalized correction.
+
+This sharpens the restart target. Low-height stored corrections can be sent
+to Baker/Archimedean non-shadowing. The unresolved case is a high-height
+correction assembled by earlier payouts. The next symbolic task is to expand
+that correction by payout times and prove that each non-colliding
+high-height contribution is amortized by the valuation that created it.
+The collision-shell algebra supplies the alternative when two correction
+contributions synchronize.
+
+The first expansion is now exact: every payout correction is a transported
+combination of the same shell displacements that govern first mergers.
+Odd payouts give a pure shell atom; even payouts give a larger shell atom
+minus the smallest shell atom. The residual proof problem is reachability:
+show when this formal shell ancestry must correspond to an actual state on a
+smaller repunit tail, or else yields enough amortized valuation to rule out a
+long primitive record deficit.
+
+Each payout also selects a canonical virtual partner
+
+\[
+Y=4^{\lfloor q/2\rfloor}X+
+\frac{4^{\lfloor q/2\rfloor}-1}{3}
+\]
+
+for its successor \(X\), and \(f(Y)=f(X)\). In the finite merger census
+through \(n\le2001\), this immediately preceding payout explains \(452\) of
+\(881\) first mergers. The next reachability theorem must therefore allow
+both this direct mechanism and deeper shell ancestry.
+
+### Candidate path: payout-ledger concentration versus diffusion
+
+At a valuation-one step the local storage exchange rate is exact:
+
+\[
+\Delta D=\Delta\log_2 Z=\log_2(3/2).
+\]
+
+Thus storage is not locally more expensive than deficit accumulation, and a
+purely local amortization argument cannot work. The possible strict advantage
+must come from the payout ledger
+
+\[
+B_K=\frac12+\sum_{j<K,\ e_j>1}
+\left(1-2^{1-e_j}\right)2^{-D_{j+1}}.
+\]
+
+At primitive record-deficit times, split into two cases:
+
+1. a bounded number of payout contributions dominates \(B_K\), in which case
+   test their transported shell atoms for forced reachability or collision
+   with a smaller repunit tail;
+2. the ledger is diffuse, in which case seek an inequality charging the
+   number, size, and spacing of the creating payouts against the depth or
+   duration of the later record deficit.
+
+This is a possible proof path, not a theorem. A successful result must force
+descent, merge inheritance, or an explicit upper bound on record deficit; it
+cannot compare simultaneous surplus and deficit because \(S_K=-D_K\).

@@ -2,7 +2,7 @@
 
 **Building on:** `repunit_tail_merge_reduction.md`,
 `repunit_enemy_episode_analysis.md`
-**Status:** Exact collision-shell theorem, two explicit infinite merger
+**Status:** Exact collision-shell theorem, explicit infinite synchronization
 families, and finite classification data. This does not yet prove that every
 repunit tail merges or descends.
 **License:** CC-BY 4.0
@@ -354,12 +354,10 @@ The explicit gap-\(2\) and gap-\(4\) families show that shell hitting can be
 forced by exponent congruences. The step-\(2\) and step-\(3\) gap-\(2\)
 families already form the first levels of a synchronization residue tree.
 
-The next diagnostic should extend that tree by:
-
-1. classifying all gap-\(2\) shell hits at step \(4\);
-2. measuring the new residue mass after removing the proved earlier levels;
-3. determining whether the uncovered odd residue mass shrinks geometrically;
-4. performing the same construction for gap \(4\), then gap \(6\).
+This programme was carried out in `repunit_gap2_sync_tree.md` and
+`repunit_multigap_sync_union.md`. The resulting trees are exact but grow
+rapidly, and their bounded shallow union is too small to explain the observed
+eventual merger rate.
 
 ---
 

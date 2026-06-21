@@ -77,11 +77,17 @@ def analyse_merge(row):
 
     if E < F:
         low_side = "large"
+        low_state = x
+        high_state = y
+        high_incoming_e = m_vals[j - 2] if j >= 2 else None
         correction_quotient = (A - B) >> (E + 1)
         low_next = e
         high_next = f
     else:
         low_side = "small"
+        low_state = y
+        high_state = x
+        high_incoming_e = n_vals[i - 2] if i >= 2 else None
         correction_quotient = (B - A) >> (F + 1)
         low_next = f
         high_next = e
@@ -89,6 +95,15 @@ def analyse_merge(row):
     expected_quotient = ((1 << delta) - 1) // 3
     assert correction_quotient == expected_quotient
     assert low_next - high_next == delta
+    h = delta // 2
+    virtual_partner = (1 << (2 * h)) * high_state + (
+        (1 << (2 * h)) - 1
+    ) // 3
+    assert low_state == virtual_partner
+    incoming_selects_shell = (
+        high_incoming_e is not None
+        and 2 * (high_incoming_e // 2) == delta
+    )
 
     return {
         **row,
@@ -103,6 +118,8 @@ def analyse_merge(row):
         "valuation_gap": delta,
         "low_next_e": low_next,
         "high_next_e": high_next,
+        "high_incoming_e": high_incoming_e,
+        "incoming_selects_shell": incoming_selects_shell,
         "correction_quotient": correction_quotient,
     }
 
@@ -180,6 +197,24 @@ def print_cross_gap_summary(rows):
         )
 
 
+def print_virtual_partner_summary(rows):
+    selected = [row for row in rows if row["incoming_selects_shell"]]
+    print("\n== canonical virtual-partner selection ==")
+    print(
+        f"first mergers selected by the high state's incoming payout: "
+        f"{len(selected)}/{len(rows)}="
+        f"{len(selected)/len(rows):.2%}"
+    )
+    print(
+        "selected incoming valuations: "
+        f"{Counter(row['high_incoming_e'] for row in selected).most_common()}"
+    )
+    print(
+        "selected collision shells: "
+        f"{Counter(row['valuation_gap'] for row in selected).most_common()}"
+    )
+
+
 def parse_args():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--limit", type=int, default=2001)
@@ -215,6 +250,7 @@ def main():
             args.top,
         )
     print_cross_gap_summary(rows)
+    print_virtual_partner_summary(all_rows)
 
 
 if __name__ == "__main__":

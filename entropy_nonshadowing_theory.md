@@ -10,9 +10,16 @@ open; modulus size alone cannot prove non-shadowing.
 
 ## Abstract
 
-We formalise a global conservation perspective on the accelerated odd Collatz map. While local potential functions $P(x) = \log_2 x + g(\tau(x))$ are fundamentally obstructed by the recharge mechanism, we show that recharge is not a free source of growth. Every recharge step of payout valuation $s$ and new fuel $m$ resolves exactly $s+m$ bits of the initial state, while the state grows in magnitude by at most $s - \log_2 3$ bits (in log space). 
+We formalise a global bookkeeping perspective on the accelerated odd Collatz
+map. An exact identity relates total valuation weight \(E_K\), logarithmic
+magnitude change, and the affine correction.
 
-We establish an exact **Information Conservation Law** relating the total valuation weight $E_K$ to the log-magnitude growth. Using this law, we prove that sustaining a growing trajectory requires a continuous sequence of highly restrictive $2$-adic alignments. Because the base-$3$ repunit sequence $a_n = (3^n-1)/2$ has low Kolmogorov complexity ($K(a_n) \le \log_2 n + O(1)$), we conjecture that it cannot contain the high-entropy information required to shadow the non-descending "survivor" set through a window as long as $3n$.
+The identity explains how valuation surplus is exchanged against growth, but
+does not itself prove non-shadowing. In particular, modulus size and
+Kolmogorov-complexity heuristics are insufficient: short algebraic rules can
+select very deep \(2\)-adic residue classes. The useful remaining question is
+arithmetic—how quickly the least positive representatives of active survivor
+classes grow, after merger classes are removed.
 
 ---
 

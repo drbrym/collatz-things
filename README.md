@@ -52,6 +52,12 @@ Start with:
   \(5\) through step \(K\) is exactly
   \(\frac12(3/4)^K\), so almost every odd-indexed repunit eventually reaches
   rail \(5\).
+- [`repunit_rail5_survivor_geometry.md`](repunit_rail5_survivor_geometry.md)
+  identifies the infinite rail-\(5\) avoiders as a self-similar \(2\)-adic
+  Cantor set conjugate to the full shift on valuation symbols \(\{1,2\}\).
+  It has Haar measure zero and Hausdorff dimension
+  \(\log_2((1+\sqrt5)/2)\); the same dimension holds for the corresponding
+  repunit-index survivor set.
 - [`repunit_affine_tail_bound.md`](repunit_affine_tail_bound.md)
   proves that the affine correction in the repunit-tail ledger is
   exponentially small throughout every pre-descent linear window.
@@ -74,6 +80,15 @@ Start with:
   proves that positive integer exponents cannot shadow the
   \(3^{\alpha+1}=-7\) ghost branch for more than \(O(\log n)\) steps, via
   Yu's \(p\)-adic Baker theorem.
+- [`repunit_extremal_principle.md`](repunit_extremal_principle.md)
+  gives an exact payout ledger and shell-ancestry expansion for record
+  valuation deficits, and isolates a primitive reachability lemma as the next
+  proof target.
+- [`repunit_run_length_identity.md`](repunit_run_length_identity.md)
+  proves the fuel-enemy bridge \(\tau(x_K)=v_2(3^{m_K}+d_K)-E_K-1\) and the
+  exact valuation-one run-length identity, unifying the burn, enemy-coordinate,
+  and deficit pictures; an accompanying factorization probe shows the dangerous
+  enemy constants are high-height rough primes.
 - [`Exponential_Decay_Potential.md`](Exponential_Decay_Potential.md)
   proves descent of a bounded bit-weight potential on one explicit recharge
   family. Its epoch-wide behaviour is only a finite certificate, and it is not
@@ -115,6 +130,13 @@ proved-results track:
   automaton/normal-form notes.
 - [`fuse_map_theory.md`](fuse_map_theory.md) and
   [`fuse_burn_attack.md`](fuse_burn_attack.md).
+- [`martingale_logspace_perspective.md`](martingale_logspace_perspective.md) —
+  exact Haar-random valuation martingale, logarithmic drift, corrected
+  large-deviation rate function, and a carefully limited diffusion
+  approximation.
+- [`explore_martingale_repunit_drift.py`](explore_martingale_repunit_drift.py) —
+  verifier for the martingale formulas and exact valuation-pattern counts,
+  with a separately labelled fixed-window repunit diagnostic.
 
 The parity-itinerary note
 [`Collatz_Parity_Fragility_Corrected.md`](Collatz_Parity_Fragility_Corrected.md)
@@ -140,6 +162,7 @@ python verify_exponential_potential.py
 python verify_repunit_reduction.py
 python verify_repunit_rail5.py
 python verify_repunit_rail5_density.py
+python verify_repunit_rail5_survivor_geometry.py
 python verify_repunit_affine_tail.py
 python verify_repunit_tail_merges.py
 python verify_repunit_gap_mergers.py
@@ -151,6 +174,10 @@ python verify_repunit_low_prefix.py
 python verify_repunit_baker_nonshadowing.py
 python explore_baker_applicability.py --limit 5001
 python explore_repunit_enemy_episodes.py --limit 10001 --min-run 1
+python verify_repunit_extremal_principle.py
+python explore_repunit_extremal_prefixes.py --limit 2001
+python verify_repunit_run_length.py --limit 201
+python explore_repunit_enemy_factorization.py --limit 4001 --bound 1000000
 python verify_stopping_density.py
 python verify_cycle_reduction.py
 python verify_tree_survivors.py
