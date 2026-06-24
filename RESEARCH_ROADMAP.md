@@ -146,7 +146,7 @@ C(N)=\max_{\substack{7\le n\le N\\n\ {\rm odd}}}\frac{\sigma_n}{n},
 \sigma_n=\min\{K\ge1:f^K(a_n)<2^n-1\}.
 \]
 
-The present baseline is \(C(10001)=63/23\approx2.73913\). Before fixing a
+The present baseline is \(C(20001)=63/23\approx2.73913\). Before fixing a
 linear-window constant, extend this search and record:
 
 - every new record for \(\sigma_n/n\);
@@ -169,6 +169,46 @@ linear-window constant, extend this search and record:
 
 This stage protects against promoting a finite-window constant into a theorem
 target prematurely.
+
+### Tight-margin diagnostic update
+
+The auxiliary script `explore_repunit_tight_margins.py` scans first-descent
+margins for repunit tails. It is exploratory evidence, not a certificate beyond
+its stated finite range.
+
+Through odd exponents `7 <= n <= 20001`, the ratio record remains the small
+exponent
+\(n=23\):
+
+\[
+\sigma_{23}=63,
+\qquad
+\sigma_{23}/23=63/23\approx2.739130.
+\]
+
+No larger exponent in this range exceeds that ratio. The tightest exact
+descent margins, however, occur at much larger exponents:
+
+| rank | \(n\) | \(\sigma_n\) | \(\sigma_n/n\) | exact margin |
+|---:|---:|---:|---:|---:|
+| 1 | 6035 | 8236 | 1.36471 | 0.000152 |
+| 2 | 18707 | 26766 | 1.43080 | 0.000205 |
+| 3 | 18921 | 25887 | 1.36816 | 0.000268 |
+| 4 | 3871 | 5745 | 1.48411 | 0.000593 |
+| 5 | 10397 | 14820 | 1.42541 | 0.000619 |
+
+This separates two phenomena: the largest observed linear ratio is still a
+small-exponent event, while the apparent hard finite cases are near-threshold
+crossings with tiny positive final margins. In the tightest examples, descent
+usually occurs after the orbit has returned to within a few bits of the target,
+and the final crossing is caused by a modest valuation such as `3` or `4`, not
+by a single exceptional late payout.
+
+The next diagnostic target is therefore a near-threshold episode scanner: for
+each tight case, locate the first time the exact margin enters a band such as
+\(-10 < \log_2((2^n-1)/x_K) < 0\), then record the time spent in that band, the
+valuation pattern inside it, and whether those windows recur across different
+exponents.
 
 ---
 
