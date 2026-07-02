@@ -1,8 +1,5 @@
 # Repository edits — 2026-07-01 session
 
-**Status: applied** (including promotion of `corridor_rate.md` COR1–COR3 to the
-ledger and README; supersedes the geometric-decay proof-target sketch below).
-
 Four maintenance items plus one new proved note. Apply in order; each item
 lists the file, the change, and the reason.
 

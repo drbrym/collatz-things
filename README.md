@@ -7,88 +7,156 @@ f(x)=\frac{3x+1}{2^{v_2(3x+1)}}\qquad(x\text{ odd}).
 \]
 
 It does **not** contain a proof of the Collatz conjecture. Its maintained
-results are a mixture of exact identities, a rederivation of a known density
-theorem, bounded computational certificates, and explicitly labelled proof
-targets.
+results are a mixture of exact identities, no-go theorems for
+potential-function methods, a rederivation of known density theorems, an
+exact survivor-density rate theorem, bounded computational certificates,
+and explicitly labelled proof targets.
 
 Start with:
 
 - [`NOTATION.md`](NOTATION.md) for the canonical map and symbols.
 - [`CLAIM_LEDGER.md`](CLAIM_LEDGER.md) for the authoritative status of every
   maintained claim.
+- [`mersenne_obstructions.tex`](mersenne_obstructions.tex) — the
+  consolidated manuscript *No-Go Theorems for One-Step Lyapunov Potentials
+  for the 3x+1 Map* (Theorems A–D below), with compiled PDF.
 
 ## Proved-results track
+
+### No-go theorems for one-step potentials
+
+- [`shadow_certificate.md`](shadow_certificate.md)
+  **(SH1, master theorem).** Shadowing the expanding rational cycle
+  \(-5\mapsto-7\) at positive integers \(x\equiv-5\bmod 2^N\) proves: no
+  potential \(\log_2x+g(x\bmod2^m,\,\tau,\,\mathrm{len},\,
+  \lambda_1..\lambda_d)\) is nonincreasing, for any modulus, any detector
+  depths, and any \(g\). Smallest certificate:
+  \(1275\mapsto1913\mapsto1435\). General principle: every expanding
+  rational cycle (\(2^E<3^K\)) is a certificate factory.
+- [`leading_digit_nogo.md`](leading_digit_nogo.md)
+  **(SH2).** Iterating the shadow and applying Dirichlet approximation to
+  \(\log_2\frac98\) extends the exclusion to corrections using any fixed
+  number of leading binary digits.
+- [`spine_synthesis.md`](spine_synthesis.md)
+  **(BND1).** No potential \(\log_2x+G(x)\) with bounded \(G\), of
+  arbitrary dependence, is nonincreasing (one paragraph from the Mersenne
+  burn). Also **(SPN1)**: the complete exact lane — tower \(\to\) Mersenne
+  \(\to\) burn \(\to\) repunit, length \(d+M+1\), with exact payout
+  \(e^\star=2+v_2(1+3^{d-1}s)\); every tower member lies on rail \(8y+1\).
+- [`no_local_potential.md`](no_local_potential.md) **(NLP1)** and
+  [`nlp2_alternation.md`](nlp2_alternation.md) **(NLP2)** — the original
+  family-method proofs (burn/recharge scissors) for the residue-and-fuel
+  subclasses. Subsumed by SH1 as impossibility statements; retained for
+  the exact price mechanism (each detector level costs a would-be
+  potential exactly \(\log_2\frac43\) against an unbounded liability) and
+  the historical proof path.
+- [`fuel_fraction_nogo.md`](fuel_fraction_nogo.md) **(FFN1)** — the
+  \((\tau,\mathrm{len})\) class by explicit 11-witness certificate.
+  Subsumed by SH1; retained for the certificate method exposition.
+- [`verify_nogo_certificate.py`](verify_nogo_certificate.py) — logically
+  independent verification: no-go constraint systems on finite coordinate
+  windows are difference-constraint systems, infeasible iff the coordinate
+  graph of raw orbit steps contains a cycle of ratio-product \(>1\);
+  Bellman–Ford mining plus exact rational confirmation.
+
+The surviving one-step class reads the quantized full logarithm
+\(\lfloor2^j\log_2x\rfloor\); see the manuscript's boundary section. This
+is where the no-go program terminates.
+
+### The Mersenne ancestry tower
+
+- [`tower_theorem.md`](tower_theorem.md)
+  **(TWR1).** For every depth \(d\) and \(M\equiv1\bmod 2\cdot3^{d-1}\),
+  \(w_d(M)=(2^{M+2d}-2^{2d+1}+3^d)/3^d\) satisfies
+  \(f^d(w_d(M))=2^M-1\) with every step an \(e{=}2\) step; exact
+  carry-free periodic binary normal form of period \(2\cdot3^{d-1}\)
+  (via LTE); frozen 2-adic tails separating at bit \(2\min(d,d')+1\).
+  Resolves the hierarchy conjecture of
+  [`latent_fuel_notes.md`](latent_fuel_notes.md). Also **(NLPD)**, the
+  unconditional detector no-go, now subsumed by SH1.
 
 ### Binary and residue structure
 
 - [`Block_Fracture_Lemma.md`](Block_Fracture_Lemma.md)
-  proves
-  \(3(2^L-1)=\texttt{10}1^{L-2}\texttt{01}\), a protected interior
-  consecutive-one window for an isolated block, and the exact first odd-step
-  from a Mersenne number.
+  proves \(3(2^L-1)=\texttt{10}1^{L-2}\texttt{01}\), a protected interior
+  consecutive-one window for an isolated block, and the exact first
+  odd-step from a Mersenne number.
 - [`Mod8_Rail_Descent.md`](Mod8_Rail_Descent.md)
   proves immediate descent on residues \(1\) and \(5\bmod8\), an exact
   fixed-division bridge on residue \(3\bmod8\), and the finite rail-\(7\)
   stay recursion.
 - [`collatz_rail7_new_results.md`](collatz_rail7_new_results.md)
-  gives the closed form for the rail-\(7\) recursion and its Mersenne-index
-  escape formulas.
+  gives the closed form for the rail-\(7\) recursion and its
+  Mersenne-index escape formulas.
 
-### Mersenne structure and potential limitations
+### Mersenne structure
 
 - [`recharge_nogo.md`](recharge_nogo.md)
-  proves that no potential of the form
-  \(\log_2x+g(v_2(x+1))\) is globally nonincreasing, and derives the exact
-  Mersenne burn ledger.
-- [`no_local_potential.md`](no_local_potential.md)
-  proves that no potential of the form
-  \(\log_2x+g(x\bmod2^m,\tau(x))\) is globally nonincreasing, for any
-  modulus \(2^m\) and any \(g\); strictly generalizes the recharge no-go.
+  proves the original \(\log_2x+g(v_2(x+1))\) no-go (now subsumed by SH1)
+  and derives the exact Mersenne burn ledger. Attribution: the iterated
+  burn identity \(2^tu-1\to3^tu-1\) is recorded by Andaloro (Fibonacci
+  Quart. 38 (2000) 73–78); the coordinate-freezing use is this
+  repository's.
 - [`mersenne_repunit_reduction.md`](mersenne_repunit_reduction.md)
-  reduces the Mersenne trajectory after its closed-form burn to the base-\(3\)
-  repunit \((3^n-1)/2\) for odd \(n\).
+  reduces the Mersenne trajectory after its closed-form burn to the
+  base-\(3\) repunit \((3^n-1)/2\) for odd \(n\).
 - [`Exponential_Decay_Potential.md`](Exponential_Decay_Potential.md)
-  proves descent of a bounded bit-weight potential on one explicit recharge
-  family. Its epoch-wide behaviour is only a finite certificate, and it is not
-  a global Lyapunov function.
+  proves descent of a bounded bit-weight potential on one explicit
+  recharge family. Its global failure is now a theorem (BND1), not just
+  an admission.
 
 ### Density and cycles
 
-- [`stopping_time_density.md`](stopping_time_density.md)
-  gives a self-contained rederivation of the Terras/Everett almost-everywhere
-  finite-stopping-time theorem with an explicit geometric bound. This is a
-  known theorem, not a new resolution of the exceptional set.
 - [`corridor_rate.md`](corridor_rate.md)
-  proves the exact exponential decay rate of budget-\(K\) valuation survivors
-  (\(\rho_1=e^{-I(\theta)/\theta}\)) and the undischarged-class branching
-  exponent \(2\rho_1\).
+  **(COR1–COR3).** The exact survivor-density rate: the density of odd
+  integers not discharged by a \(K\)-bit valuation budget satisfies
+  \(\lim p_K^{1/K}=\rho^{1/\theta}=0.965907\ldots\), with the explicit
+  bound \(p_K\le31\,\rho^{K/\theta}\); consequently any finite-modulus
+  forced-descent tree prover faces an undischarged frontier growing with
+  branching factor exactly \(2\rho^{1/\theta}=1.9318\ldots\). Supersedes
+  the refuted conjecture of `descent_tree_survivors.md`.
+- [`stopping_time_density.md`](stopping_time_density.md)
+  gives a self-contained rederivation of the Terras/Everett
+  almost-everywhere finite-stopping-time theorem with an explicit
+  geometric bound. Known theorem, not a new resolution of the exceptional
+  set.
 - [`cycle_reduction.md`](cycle_reduction.md)
   proves the affine cycle equation and records carefully bounded finite
-  searches. It does not exclude all nontrivial cycles.
+  searches. It does not exclude all nontrivial cycles; convergence is
+  computationally verified in the literature to \(\sim2^{68}\) (Barina),
+  which dominates the bounded searches here.
 
 ## Finite certificates
 
 The following statements are exhaustive only over their stated bounds:
 
-- Every odd \(x\le10^6\) descends below itself within at most 111 odd-steps.
-- The decayed-bit potential decreases across every tested first-descent epoch
-  for odd \(x\le10^6\) with \(c=r=0.2\).
-- The bounded cycle-pattern search documented in `cycle_reduction.md` finds
-  only \(x=1\).
-- The measured descent-tree survivor fractions are non-increasing and satisfy
-  \(\operatorname{dens}(S_K)\le\rho^K\) for \(6\le K\le20\) only (the
-  universal \(\rho^K\) bound is refuted at \(K=195\); see `corridor_rate.md`).
+- Every odd \(x\le10^6\) descends below itself within at most 111
+  odd-steps.
+- The decayed-bit potential decreases across every tested first-descent
+  epoch for odd \(x\le10^6\) with \(c=r=0.2\).
+- The bounded cycle-pattern search documented in `cycle_reduction.md`
+  finds only \(x=1\).
+- The measured descent-tree survivor fractions satisfy \(\le\rho^K\) for
+  \(6\le K\le20\) **only**; the universal \(\rho^K\) bound is refuted
+  (first failure \(K=195\), `verify_survivor_density_rate.py`), and the
+  correct asymptotic rate is \(\rho^{1/\theta}\) (COR2).
+- Mined no-go certificates cover the tested coordinate windows over odd
+  \(x\le2\cdot10^6\); the uniform theorems are carried by the shadow
+  families, not by the mining.
 
 ## Proof targets and exploratory work
 
-These documents are useful research records but are not dependencies of the
-proved-results track:
+These documents are useful research records but are not dependencies of
+the proved-results track:
 
 - [`descent_tree_survivors.md`](descent_tree_survivors.md) — exact spine
-  anchor plus finite survivor certificates (density rate proved in
-  `corridor_rate.md`).
+  anchor; its original Conjecture 1 is **refuted** and superseded by
+  COR1–COR3.
+- [`latent_fuel_notes.md`](latent_fuel_notes.md) — discovery path for the
+  tower; its hierarchy conjecture is **resolved** by TWR1.
 - [`repunit_tail_attack.md`](repunit_tail_attack.md) and related repunit
-  automaton/normal-form notes.
+  automaton/normal-form notes. The open residual \(\sigma(a_n)\) after
+  the repunit landing is unchanged by all of the above.
 - [`fuse_map_theory.md`](fuse_map_theory.md) and
   [`fuse_burn_attack.md`](fuse_burn_attack.md).
 - [`fusion_fracture_cycle.md`](fusion_fracture_cycle.md),
@@ -96,50 +164,83 @@ proved-results track:
   [`recharge_density_inverse_law.md`](recharge_density_inverse_law.md).
 - [`Triple_Lock.md`](Triple_Lock.md) and
   [`Triple_Lock_Revised.md`](Triple_Lock_Revised.md).
+- [`potential_attack_notes.md`](potential_attack_notes.md) — the
+  paired-macro program; note (SPN1) that macro net drift reduces to
+  \(\sigma(a_M)\).
 
 The parity-itinerary note
 [`Collatz_Parity_Fragility_Corrected.md`](Collatz_Parity_Fragility_Corrected.md)
-proves (a rederivation of Terras/Everett parity-vector injectivity) that
-distinct starting values cannot share one parity-rule sequence indefinitely.
-It does **not** prove that trajectories cannot later merge, or that
-hypothetical cycles are metrically repelling.
+is a rederivation of Terras (1976) / Everett (1977) parity-vector
+injectivity, restated for the unaccelerated map. It does **not** prove
+that trajectories cannot later merge, or that hypothetical cycles are
+metrically repelling.
 
 ## Verification
 
-All programs use the Python standard library.
+All programs use the Python standard library; every assertion is exact
+integer or rational arithmetic.
 
 ```bash
+# no-go program
+python verify_shadow.py
+python verify_leading_digit.py
+python verify_tower.py
+python verify_no_local_potential.py
+python verify_nlp2.py
+python verify_fuel_fraction.py
+python verify_nogo_certificate.py
+python verify_spine_synthesis.py
+
+# density and rates
+python verify_corridor_rate.py
+python verify_survivor_density_rate.py
+python verify_stopping_density.py
+python verify_tree_survivors.py
+
+# structure, cycles, legacy
 python verify_block_fracture.py
 python verify_mod8_rails.py
 python verify_recharge_nogo.py
-python verify_no_local_potential.py
 python verify_exponential_potential.py
 python verify_repunit_reduction.py
-python verify_stopping_density.py
-python verify_corridor_rate.py
-python verify_survivor_density_rate.py
 python verify_cycle_reduction.py
-python verify_tree_survivors.py
 ```
 
 Interpret the output according to the claim ledger:
 
 - symbolic identities and human proofs support universal claims;
 - exhaustive loops support only their printed finite ranges;
-- random sampling and `explore_*.py` output are evidence, not proofs.
+- random sampling and `explore_*.py` output are evidence, not proofs;
+- mined certificates prove infeasibility on their exact coordinate
+  window; uniform statements require the designed families.
 
 ## Suggested reading order
 
 1. `NOTATION.md`
 2. `CLAIM_LEDGER.md`
-3. `Block_Fracture_Lemma.md`
-4. `Mod8_Rail_Descent.md`
-5. `recharge_nogo.md`
-6. `no_local_potential.md`
-7. `mersenne_repunit_reduction.md`
-8. `stopping_time_density.md`
-9. `corridor_rate.md`
-10. `cycle_reduction.md`
+3. `shadow_certificate.md`
+4. `tower_theorem.md`
+5. `leading_digit_nogo.md`
+6. `corridor_rate.md`
+7. `spine_synthesis.md`
+8. `recharge_nogo.md`
+9. `Mod8_Rail_Descent.md`
+10. `mersenne_repunit_reduction.md`
+11. `stopping_time_density.md`
+12. `cycle_reduction.md`
+
+## Correction history (standard, not embarrassment)
+
+- The universal survivor bound \(\rho^K\) (TREE2) was refuted by exact
+  computation at \(K=195\) after passing its \(K\le20\) certificate; the
+  corrected rate \(\rho^{1/\theta}\) is now a theorem (COR1–COR2).
+- The parity-fragility theorem was reclassified as a rederivation of
+  Terras/Everett after a literature pass.
+- A draft of SPN1 overclaimed \(M\equiv1\bmod4\) uniformly; refuted by
+  its verifier at \((d,s)=(1,1)\) and corrected before promotion.
+- NLP1/NLP2/NLPD/FFN1 were superseded as impossibility statements by the
+  strictly stronger and simpler SH1 within the same research arc; their
+  structural content is retained.
 
 ## Contribution standard
 
