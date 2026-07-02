@@ -15,6 +15,7 @@ before its claim is used downstream.
 | RAIL7 | \(f^2(8y+7)=18y+17\), with stay depth \(\lfloor v_2(y+1)/2\rfloor\) | Proved here | `Mod8_Rail_Descent.md`, `collatz_rail7_new_results.md` | `verify_mod8_rails.py` |
 | FIN1 | Every odd \(x\le10^6\) descends below itself within at most 111 odd-steps | Finite certificate | `Mod8_Rail_Descent.md` | `verify_mod8_rails.py` |
 | RNG1 | No potential \(\log_2x+g(\tau(x))\) is globally nonincreasing for every odd \(x>1\) | Proved here | `recharge_nogo.md` | `verify_recharge_nogo.py` checks identities and the explicit contradiction |
+| NLP1 | No potential \(\log_2 x + g(x \bmod 2^m, \tau(x))\) is nonincreasing along \(f\), for any \(m\ge0\) and any \(g\) | Proved here (pending final external literature check) | `no_local_potential.md` | `verify_no_local_potential.py`; generalizes RNG1 (the \(m=0\) case); depends on `recharge_nogo.md` Lemmas 1–2 |
 | MER1 | The Mersenne burn is \(f^{(j)}(M_n)=3^j2^{n-j}-1\) through its closed-form phase | Proved here | `recharge_nogo.md` | `verify_recharge_nogo.py` |
 | MER2 | \(f^{(n)}(M_n)=(3^n-1)/2^{v_2(3^n-1)}\) | Proved here | `mersenne_repunit_reduction.md` | `verify_repunit_reduction.py` |
 | DEN1 | Almost every odd integer has finite stopping time, with the explicit bound stated in the note | Known theorem rederived | `stopping_time_density.md` | Terras/Everett; verifier checks finite instances of the ingredients |
@@ -25,8 +26,11 @@ before its claim is used downstream.
 | CYC3 | Minima of nontrivial cycles have natural density zero | Conditional corollary | `cycle_reduction.md` | Depends on DEN1; does not imply the same for every cycle element |
 | CYC4 | No nontrivial positive cycle has an element \(\le10^6\) | Finite certificate | `cycle_reduction.md` | Any such cycle would have a minimum \(\le10^6\), contradicting FIN1 |
 | TREE1 | The all-ones residue anchors every tested descent-tree depth and has minimal initial valuations | Proved burn + finite tree certificate | `descent_tree_survivors.md` | `verify_tree_survivors.py` |
-| TREE2 | Tree-survivor density is universally bounded by \(\rho^K\) | Conjecture / proof gap | `descent_tree_survivors.md` | Current argument conflates bit depth with odd-step count |
-| PAR1 | Two trajectories with nonzero offset cannot follow the same parity-rule sequence indefinitely | Proved here | `Collatz_Parity_Fragility_Corrected.md` | Does not imply non-merging, repulsion, or absence of basins |
+| TREE2 | Tree-survivor density is universally bounded by \(\rho^K\) | **Refuted** (exact computation; first failure \(K=195\)) | `descent_tree_survivors.md` | `verify_survivor_density_rate.py`; see COR1–COR2 for the correct rate |
+| COR1 | \(\operatorname{dens}(\tilde S_K)\le31\,\rho^{K/\theta}\) for all \(K\ge1\) | Proved here | `corridor_rate.md` | `verify_corridor_rate.py` |
+| COR2 | \(\lim \operatorname{dens}(\tilde S_K)^{1/K}=\rho^{1/\theta}=0.9659\ldots\) | Proved here | `corridor_rate.md` | DP rate convergence (finite evidence for the limit; proof is human) |
+| COR3 | Undischarged-class count grows with branching factor \(2\rho^{1/\theta}=1.9318\ldots\) | Proved here (from COR1/2) | `corridor_rate.md` | Corollary 2 of `corridor_rate.md` |
+| PAR1 | Two trajectories with nonzero offset cannot follow the same parity-rule sequence indefinitely | Known theorem rederived | `Collatz_Parity_Fragility_Corrected.md` | Terras 1976 / Everett 1977 parity-vector injectivity, restated for the C-map (k halvings in place of k T-steps); does not imply non-merging, repulsion, or absence of basins |
 
 ## Exploratory documents
 

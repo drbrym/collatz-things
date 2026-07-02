@@ -1,14 +1,14 @@
 # The Descent-Tree Survivors Are the Spine
 
 **Building on:** `verify_descent_tree.py`, `stopping_time_density.md`, `recharge_nogo.md`, `mersenne_repunit_reduction.md`
-**Status:** Exploratory synthesis with one exact spine result and finite survivor certificates. The proposed universal density bound is not yet proved.
+**Status:** Exploratory synthesis with one exact spine result and finite survivor certificates. The original $\rho^K$ density bound is refuted; the correct decay rate is proved in `corridor_rate.md`.
 **License:** CC-BY 4.0
 
 ---
 
 ## Abstract
 
-The branching certificate in `verify_descent_tree.py` discharges many residue classes mod $2^K$ but leaves a stubborn set undischarged at every tested depth. The survivors are valuation-deficient classes and are anchored by the **Mersenne spine**: the all-ones residue $2^K-1$ survives through its initial burn, where all valuations are \(1\). Finite computations show a decreasing survivor fraction bounded by \(\rho^K\) through the tested range. A proof of that bound for every \(K\) is still missing because tree depth counts known low bits, whereas the Cramér estimate in `stopping_time_density.md` counts a fixed number of odd-steps.
+The branching certificate in `verify_descent_tree.py` discharges many residue classes mod $2^K$ but leaves a stubborn set undischarged at every tested depth. The survivors are valuation-deficient classes and are anchored by the **Mersenne spine**: the all-ones residue $2^K-1$ survives through its initial burn, where all valuations are \(1\). Finite computations through $K=20$ show a decreasing survivor fraction bounded by $\rho^K$, but that bound is pre-asymptotic: exact first-passage computation (`verify_survivor_density_rate.py`) refutes the universal $\rho^K$ claim at $K=195$. The correct exponential rate $\rho_1=e^{-I(\theta)/\theta}=0.9659\ldots$ is proved in `corridor_rate.md`.
 
 ---
 
@@ -30,11 +30,11 @@ $$
 
 ## 1. The survivors are a vanishing lower-tail set
 
-**Conjecture 1 (survivor-density bound).** $\operatorname{dens}(S_K)=|S_K|/2^{K-1}\le \rho^{K}$, with $\rho=e^{-I(\log_2 3)}=0.9465\ldots$, and the density is non-increasing.
+**Theorem (survivor-density rate, proved in `corridor_rate.md`).** Let $\tilde S_K$ be the budget-$K$ survivor set in the natural-density (valuation-walk) formulation of `corridor_rate.md` §0. Then $\operatorname{dens}(\tilde S_K)^{1/K}\to\rho_1=e^{-I(\theta)/\theta}=0.965907\ldots$ as $K\to\infty$, with explicit bound $\operatorname{dens}(\tilde S_K)\le31\,\rho_1^{\,K}$ for all $K\ge1$. Undischarged residue classes mod $2^K$ grow with branching factor $2\rho_1=1.93182\ldots$ (Corollary 2 of `corridor_rate.md`).
 
-The verifier confirms this for \(6\le K\le20\). The earlier attempted proof used the single-time event \(E_K\le\theta K\), but the symbol \(K\) played two different roles: modulus depth in the tree and odd-step count in the Cramér estimate. No valid containment between those events has yet been established.
+**History note.** The original Conjecture 1 claimed $\operatorname{dens}(S_K)\le\rho^{K}$ with $\rho=e^{-I(\theta)}=0.9465\ldots$. This is **FALSE**: `verify_survivor_density_rate.py` shows the bound holds only for $K\le194$ (walk formulation) and the ratio $\operatorname{dens}/\rho^K$ grows without bound thereafter. The $K\le20$ finite certificate was pre-asymptotic; the two roles of $K$ (modulus depth vs odd-step budget) are exactly the source of the discrepancy — the correct exponent is $I(\theta)$ per step over $\approx K/\theta$ steps, not over $K$ steps.
 
-(Verified: $\operatorname{dens}(S_K)$ runs from $0.53$ at $K=6$ to $0.14$ at $K=20$, always $\le\rho^K$.)
+(Verified for $6\le K\le20$: $\operatorname{dens}(S_K)$ runs from $0.53$ to $0.14$, always $\le\rho^K$ in that range only.)
 
 ---
 
@@ -73,9 +73,11 @@ the remaining classes is a finite certificate and conjectural pattern.
 
 **Proved:** the spine anchor $2^K-1\in S_K$ through its initial burn and its minimal initial valuation sequence.
 
-**Finite certificate:** the measured survivor fractions are non-increasing and at most \(\rho^K\) for \(6\le K\le20\).
+**Finite certificate:** the measured survivor fractions are non-increasing and at most $\rho^K$ for $6\le K\le20$ only; this does **not** extend with constant $\rho$ (refuted at $K=195$).
 
-**Open:** the universal density bound and any exact identification of the tree survivors with the stopping-time lower-tail set.
+**Proved elsewhere:** geometric decay at rate $\rho_1=e^{-I(\theta)/\theta}$ for the walk formulation (`corridor_rate.md`, claims COR1–COR2).
+
+**Open:** sharp prefactors; exact identification of the mod-$2^K$ residue-count set $S_K$ with the walk formulation in the limit (agreement to $\lesssim0.5\%$ for $K\le16$).
 
 **Not proved:** a measure formula for the limiting \(2\)-adic survivor set, or
 that every positive integer eventually leaves the corresponding survivor

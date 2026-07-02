@@ -65,7 +65,10 @@ def check_density_bound(Klo=6, Khi=20):
         frac = len(S) / 2 ** (K - 1)
         taus = [tau(r) for r in S]
         mt = sum(taus) / len(taus)
-        assert frac <= RHO ** K, (K, frac, RHO ** K)        # density bound
+        # frac <= rho^K holds for K=6..20 only (pre-asymptotic). The universal
+        # rho^K bound is REFUTED at K=195; see verify_survivor_density_rate.py
+        # and corridor_rate.md for the correct rate rho^(1/theta).
+        assert frac <= RHO ** K, (K, frac, RHO ** K)
         assert frac <= prev + 1e-12                          # non-increasing
         prev = frac
         print(f"   {K:3d} {len(S):9d} {frac:8.4f} {RHO**K:8.4f} {mt:8.2f} {max(taus):7d}")

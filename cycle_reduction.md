@@ -83,6 +83,8 @@ To exclude cycles outright, C1 shows it suffices to prevent $x=c_K/(2^{E_K}-3^K)
 
 **Not proved:** the nonexistence of nontrivial cycles. That needs a lower bound on $|2^{E_K}-3^K|$ (transcendence theory), which this note isolates but does not establish.
 
+**Relation to prior computation and theory.** Convergence of all trajectories has been verified computationally far beyond the range used here (on the order of $2^{68}$, Barina), so CYC4's $10^6$ bound has no independent value beyond internal consistency of this repository's pipeline. Likewise, Baker-type transcendence bounds combined with the verified range exclude nontrivial cycles of very large minimum length (Steiner's 1-cycle theorem; Simons & de Weger's $m$-cycle exclusions). The finite certificates CYC2/CYC4 are maintained as machine-checked anchors for this repository's own claims, not as contributions to the state of the art.
+
 ---
 
 ## Appendix — Verification

@@ -1,7 +1,10 @@
 # **Collatz Parity Fragility and Instability of Near-Cycles**
 
-> **Status: proved parity-itinerary result with corrected interpretation.**
-> Distinct starts cannot share one parity-rule sequence indefinitely. The note
+> **Status: known theorem rederived (Terras 1976 / Everett 1977), with
+> corrected interpretation.** Distinct starts cannot share one parity-rule
+> sequence indefinitely; this is the classical parity-vector injectivity
+> result, restated for the unaccelerated map (the halving-step count here
+> plays the role of the T-step count in Terras's formulation). The note
 > does not prove non-merging, metric repulsion, or absence of basins.
 
 *A friendly, clean write-up by a physicist who got interested in the Collatz map.*

@@ -1,0 +1,644 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1.1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue]{hyperref}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{question}[theorem]{Question}
+
+\newtheorem*{thmA}{Theorem A}
+\newtheorem*{thmB}{Theorem B}
+\newtheorem*{thmC}{Theorem C}
+\newtheorem*{thmD}{Theorem D}
+
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\ord}{\operatorname{ord}}
+\newcommand{\bitlen}{\operatorname{len}}
+\newcommand{\LD}{\operatorname{LD}}
+\DeclareMathOperator{\vv}{v}
+
+\title{No-Go Theorems for One-Step Lyapunov Potentials\\ for the $3x+1$ Map}
+\author{[author]\thanks{Repository: \texttt{github.com/docbgm2002/collatz-things}.
+Every numbered claim is machine-verified in exact integer or rational
+arithmetic; see Section~\ref{sec:verification}.}}
+\date{Draft of July 2, 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+A natural strategy for the $3x+1$ (Collatz) problem is to exhibit a
+potential $\Phi(x)=\log_2x+g(x)$ that is nonincreasing along the
+accelerated odd map $f(x)=(3x+1)/2^{\vv_2(3x+1)}$, with a correction $g$
+computed from simple features of $x$. It is folklore that no such
+monotone invariant is known; we prove that for broad natural classes of
+corrections none can exist. The master mechanism is \emph{shadowing an
+expanding rational cycle}: the cycle $-5\mapsto-7\mapsto-5$ has
+multiplier $3^2/2^3>1$, and its positive-integer shadows
+$x\equiv-5\pmod{2^N}$ traverse its coordinate itinerary while gaining
+value, so any correction that cannot separate $x$ from
+$f^2(x)=\tfrac98x+\tfrac58$ is refuted by two integers --- the smallest
+certificate being $1275\mapsto1913\mapsto1435$. This excludes all
+corrections $g\bigl(x\bmod2^m,\ \tau(x),\ \bitlen(x),\
+\lambda_1(x),\dots,\lambda_d(x)\bigr)$, where $\tau$ is the
+trailing-ones count and the $\lambda_i$ are suffix-pattern detectors of
+arbitrary depth (Theorem~A). Iterating the shadow and applying
+Dirichlet approximation to $\log_2\frac98$ extends the exclusion to
+corrections using any fixed number of leading binary digits
+(Theorem~B); a Mersenne burn argument excludes all bounded corrections
+of arbitrary dependence (Theorem~C). The detectors are not ad hoc: they
+read a canonical structure, an exact ancestry tower
+$w_d(M)=\bigl(2^{M+2d}-2^{2d+1}+3^{d}\bigr)/3^{d}$ with
+$f^{d}(w_d(M))=2^{M}-1$, supported on $M\equiv1\pmod{2\cdot3^{d-1}}$
+with a carry-free periodic binary normal form (Theorem~D). The
+surviving one-step class reads the quantized full logarithm, where
+further no-go progress becomes conjecture-adjacent.
+\end{abstract}
+
+\section{Introduction}
+
+For odd $x\in\Z_{>0}$ let
+\[
+f(x)=\frac{3x+1}{2^{\vv_2(3x+1)}},
+\]
+the accelerated (odd-to-odd) form of the Collatz map; the $3x+1$
+conjecture asserts that every orbit reaches $1$. Among the strategies
+proposed for the problem, one of the most natural is the
+\emph{potential-function} (Lyapunov) method: find
+$\Phi:2\Z+1\to\R$ with $\Phi(f(x))\le\Phi(x)$ for all odd $x>1$,
+ideally of the coercive form $\Phi(x)=\log_2x+g(x)$ with $g$ a
+correction of lower order, so that monotonicity constrains orbit
+growth. Heuristics support the idea: a ``random'' odd step multiplies
+$x$ by $3/2^{e}$ with $e$ geometrically distributed of mean $2$, so
+$\log_2x$ decreases by $\log_2\frac43$ \emph{on
+average}~\cite{Lagarias1985}. The difficulty, as surveys note, is that
+no correction making the decrease pointwise has ever been
+found~\cite{Lagarias2010}. To the best of our knowledge the literature
+contains no theorem \emph{excluding} a concrete class of such
+potentials; the absence is reported as an empirical fact. This paper
+proves exclusions, and locates the precise boundary at which the
+exclusion program must stop.
+
+Throughout, $\tau(x)=\vv_2(x+1)$ is the number of trailing
+\texttt{1}s in the binary expansion of odd $x$ (the \emph{fuel}:
+Lemma~\ref{lem:fuse} shows an odd step converts one unit of fuel into a
+multiplication by almost exactly $\tfrac32$); $\bitlen(x)$ is the bit
+length; $\LD_j(x)=\lfloor x/2^{\bitlen(x)-j}\rfloor$ is the top $j$
+bits; and $\lambda_1,\lambda_2,\dots$ are the suffix-pattern detectors
+of Definition~\ref{def:detector}, which read the run length of a
+canonical hierarchy of periodic binary patterns (levels $1$ and $2$
+being $(\texttt{10})^{k}\texttt{1001}$ and
+$(\texttt{111000})^{k}\texttt{01}$). Our main impossibility results:
+
+\begin{thmA}[master no-go; Theorem~\ref{thm:A}]
+For every $m,d\ge0$ and every function $g$, the potential
+$\log_2x+g\bigl(x\bmod2^m,\ \tau(x),\ \bitlen(x),\
+\lambda_1(x),\dots,\lambda_d(x)\bigr)$ is not nonincreasing along $f$
+on odd $x>1$.
+\end{thmA}
+
+\begin{thmB}[leading digits; Theorem~\ref{thm:B}]
+For every $m,j,d\ge0$ and every $g$, the potential
+$\log_2x+g\bigl(x\bmod2^m,\ \tau(x),\ \LD_j(x),\
+\lambda_1(x),\dots,\lambda_d(x)\bigr)$ is not nonincreasing along $f$
+on odd $x>1$.
+\end{thmB}
+
+\begin{thmC}[bounded corrections; Theorem~\ref{thm:C}]
+For every bounded $G:2\Z+1\to\R$, of arbitrary dependence on $x$, the
+potential $\log_2x+G(x)$ is not nonincreasing along $f$ on odd $x>1$.
+\end{thmC}
+
+Theorem~A is proved by two integers per parameter choice: the map has
+the expanding rational cycle $-5\mapsto-7\mapsto-5$, of multiplier
+$3^2/2^3=\tfrac98>1$ (expansion is exactly why it lives at negative
+integers), and its shadow at positive $x\equiv-5\pmod{2^N}$ reproduces
+the cycle's coordinate itinerary while the value gains a factor
+$>\tfrac98$ per period. Any correction blind to the difference between
+$x$ and $f^2(x)=\tfrac98x+\tfrac58$ is refuted outright; the smallest
+certificate is $1275\mapsto1913\mapsto1435$. Theorem~B iterates the
+shadow $a$ times and chooses $a$, by Dirichlet approximation to the
+irrational $\log_2\tfrac98$, so that the accumulated gain sits next to
+an exact power of $2$ and the leading digits return. Theorem~C is a
+one-paragraph consequence of the Mersenne burn.
+
+The detectors quantified over in Theorems A and B are given meaning by
+a structural result of independent interest:
+
+\begin{thmD}[Mersenne ancestry tower; Theorem~\ref{thm:D}]
+For $d\ge1$ and $M\equiv1\pmod{2\cdot3^{d-1}}$, $M>1$, the integer
+$w_d(M)=\bigl(2^{M+2d}-2^{2d+1}+3^{d}\bigr)/3^{d}$ is odd with
+$\tau=1$, satisfies $3w_d(M)+1=4\,w_{d-1}(M)$ and hence
+$f^{d}(w_d(M))=2^{M}-1$ with every step of value ratio in
+$(\tfrac34,1)$; its binary expansion is exactly periodic (carry-free)
+of period $2\cdot3^{d-1}$; and $w_d(M)\equiv1-2^{2d+1}3^{-d}
+\pmod{2^{M-1}}$, distinct levels separating $2$-adically at bit
+$2\min(d,d')+1$ exactly.
+\end{thmD}
+
+The tower is the complete uniform-$e{=}2$ ancestry of the Mersenne
+numbers --- the slowest exact approach to maximal fuel --- and
+$\lambda_d$ detects membership in its level-$d$ suffix pattern. The
+congruence domain is the order of $2$ modulo $3^d$, and the carry-free
+normal form is an instance of the lifting-the-exponent lemma.
+
+\subsection*{Method and provenance}
+
+The constraint ``$\Phi$ nonincreasing'' restricted to any coordinate
+window is a difference-constraint system on the values of $g$; it is
+infeasible if and only if the coordinate graph of real orbit steps
+contains a directed cycle whose product of value ratios exceeds $1$
+(Section~\ref{sec:certificates}). Mining such cycles by Bellman--Ford
+over odd $x\le10^6$ produces startlingly short certificates --- e.g.\
+the pair $57\mapsto43$, $27\mapsto41$ already refutes all
+$g(x\bmod16,\tau)$ --- and inspection of the mined witnesses revealed
+that they shadow the $-5$ cycle, which led to the uniform theorems
+above. We record this provenance because the historical route of this
+project ran in the opposite direction: Theorems A--C were first proved
+for subclasses by designed families (a Mersenne ``burn'' that forces
+linear growth of $g$ along a frozen coordinate line, against a
+``recharge'' family that caps it), a method that yields an exact price
+list --- each level of suffix detection buys a would-be potential
+exactly $\log_2\frac43$ of budget against an unbounded liability ---
+but is dominated, as a source of impossibility statements, by the
+two-integer shadow certificates. The family analysis survives in the
+repository accompanying this paper and in the structural
+Theorem~D.
+
+\subsection*{The boundary}
+
+A coordinate defeats the shadow only by separating $x$ from
+$f^{2a}(x)$ for every good Dirichlet approximation $a$: since the two
+agree on all low-order bits, fuel, suffix patterns, and (for suitable
+$a$) leading digits, the surviving one-step class reads the
+\emph{quantized full logarithm} $\lfloor2^{j}\log_2x\rfloor$. There a
+closed certificate needs total gain in $(0,2^{-j})$, which pure shadows
+cannot supply; and as $j\to\infty$ the class approaches arbitrary
+corrections, for which the existence of a monotone potential is
+conjecture-adjacent. Section~\ref{sec:boundary} makes this precise.
+
+\subsection*{Relation to the literature}
+
+The parity-vector structure underlying the heuristic goes back to
+Terras~\cite{Terras1976} and Everett~\cite{Everett1977}; density
+results culminate in~\cite{KrasikovLagarias2003} and, by different
+methods, in Tao's almost-all theorem~\cite{Tao2022}. Cycle exclusions
+rest on transcendence bounds~\cite{Steiner1977,SimonsDeWeger2005} and
+computation~\cite{Barina2021}. Backward (predecessor) structure of the
+Collatz graph is developed at the level of density and measure by
+Wirsching~\cite{Wirsching1998}; the tower of Theorem~D is a
+distinguished explicit chain in that graph, and its closed form,
+congruence domain, and $2$-adic freezing appear to be new. Forward
+identities of burn type, attached to the rational cycles at $-1$, $-5$,
+$-17$, appear in Andaloro~\cite{Andaloro2000} --- the shadows of
+Section~\ref{sec:shadow} are those identities viewed through the
+certificate lens. A search of the literature, including the annotated
+bibliographies~\cite{LagariasBibI,LagariasBibII}, located no prior
+impossibility theorems for concrete classes of one-step potentials; we
+would welcome references.
+
+\section{Preliminaries}\label{sec:prelim}
+
+Odd integers are written $x$; $\vv_p$ is the $p$-adic valuation;
+$\tau(x)=\vv_2(x+1)$; congruential inverses are taken in
+$(\Z/2^m\Z)^{\times}$. Two standard facts are used.
+
+\begin{lemma}[LTE, special case]\label{lem:lte}
+For even $n$, $\vv_3(2^{n}-1)=1+\vv_3(n)$; in particular
+$\vv_3\bigl(2^{2\cdot3^{d-1}}-1\bigr)=d$.
+\end{lemma}
+
+\begin{lemma}\label{lem:order}
+$2$ is a primitive root modulo $3^d$ for every $d\ge1$; hence
+$\ord_{3^d}(2)=\varphi(3^d)=2\cdot3^{d-1}$.
+\end{lemma}
+
+\begin{proof}
+$2$ generates $(\Z/9\Z)^{\times}$ (its order divides $6$ and is not
+$1,2,3$), and a primitive root mod $9$ is a primitive root mod $3^d$
+for all $d$.
+\end{proof}
+
+\begin{lemma}[fuse]\label{lem:fuse}
+If $\tau(x)=t\ge2$ then $\vv_2(3x+1)=1$, $f(x)=\tfrac{3x+1}{2}$,
+$\tau(f(x))=t-1$, and $f(x)/x=\tfrac32+\tfrac1{2x}$.
+\end{lemma}
+
+\begin{proof}
+Write $x+1=2^{t}u$, $u$ odd. Then
+$3x+1=2\,(3\cdot2^{t-1}u-1)$ with odd bracket since $t\ge2$, and
+$f(x)+1=3\cdot2^{t-1}u$.
+\end{proof}
+
+\begin{remark}\label{rem:andaloro}
+The iterated form of Lemma~\ref{lem:fuse} --- that $2^{t}u-1$ ($u$ odd)
+iterates in $t$ odd steps to $3^{t}u-1$, the \emph{burn} --- is
+classical; it is recorded by Andaloro~\cite{Andaloro2000} (cf.\ the
+annotation in~\cite{LagariasBibII}).
+\end{remark}
+
+Finally we define the detectors. For $d\ge1$ write
+$\ord_d=2\cdot3^{d-1}$ and, for $M\equiv1\pmod{\ord_d}$, $M>1$,
+\begin{equation}\label{eq:wd}
+w_d(M)=\frac{2^{M+2d}-2^{2d+1}+3^{d}}{3^{d}}
+=1+2^{2d+1}\,\frac{2^{M-1}-1}{3^{d}} ,
+\end{equation}
+an odd integer by Lemma~\ref{lem:order} (Theorem~\ref{thm:D} develops
+its structure; nothing beyond the formula and Lemma~\ref{lem:mod32}
+below is needed before Section~\ref{sec:tower}).
+
+\begin{definition}\label{def:detector}
+For $d\ge1$ let $\beta_d(s)$ be the bit length of
+$T^{(d)}_s:=w_d(1+\ord_d\,s)$ and define the \emph{level-$d$ detector}
+\[
+\lambda_d(x)=\max\bigl\{\,s\ge1:\
+x\equiv T^{(d)}_s\ \bigl(\mathrm{mod}\ 2^{\,\beta_d(s)+1}\bigr)\bigr\}
+\ \in\ \Z_{\ge1}\cup\{\bot\},
+\]
+the maximum of the empty set being $\bot$.
+\end{definition}
+
+\begin{lemma}\label{lem:mod32}
+Every template satisfies $T^{(d)}_s\equiv9\pmod{32}$ if $d=1$ and
+$T^{(d)}_s\equiv1\pmod{32}$ if $d\ge2$. Consequently
+$\lambda_d(y)=\bot$ for every $d$ whenever
+$y\not\equiv1,9\pmod{32}$.
+\end{lemma}
+
+\begin{proof}
+For $d\ge2$, $2^{2d+1}\equiv0\pmod{32}$ in \eqref{eq:wd}. For $d=1$:
+$M$ odd, $M\ge3$, so $2^{M-1}\equiv0\pmod4$, whence
+$(2^{M-1}-1)/3\equiv(-1)\cdot3^{-1}\equiv1\pmod4$ and
+$w_1(M)\equiv1+8\equiv9\pmod{32}$. Matching any template forces the
+mod-$32$ congruence, since every matching modulus
+$2^{\beta_d(s)+1}$ contains $32$ ($\beta_d(s)\ge4$).
+\end{proof}
+
+\section{The master theorem: shadowing the $-5$ cycle}\label{sec:shadow}
+
+The map has the rational cycle $-5\mapsto-7\mapsto-5$:
+$f(-5)=-7$, $f(-7)=-5$, with multiplier $3^2/2^3=\tfrac98>1$. Expanding
+cycles live at negative integers (the cycle equation gives
+$x=c/(2^{E}-3^{K})$ with $2^{E}<3^{K}$), and their positive shadows
+gain value while walking the cycle's coordinate itinerary.
+
+\begin{lemma}[shadow period]\label{lem:S}
+Let $N\ge8$, $w$ odd, and $x=2^{N}w-5$. Then
+\[
+\vv_2(3x+1)=1,\quad f(x)=3\cdot2^{N-1}w-7,\qquad
+\vv_2(3f(x)+1)=2,\quad f^{2}(x)=9\cdot2^{N-3}w-5,
+\]
+so that $8\,f^{2}(x)=9x+5$ and $f^{2}(x)/x=\tfrac98+\tfrac5{8x}$.
+Moreover $\tau(x)=\tau(f^2(x))=2$ and $\tau(f(x))=1$;
+$x\equiv f^{2}(x)\equiv-5$ and $f(x)\equiv-7\pmod{2^{\,N-3}}$; and
+$\lambda_d(x)=\lambda_d(f(x))=\lambda_d(f^2(x))=\bot$ for every $d$.
+\end{lemma}
+
+\begin{proof}
+Direct computation: $3x+1=2(3\cdot2^{N-1}w-7)$ with odd bracket;
+$3f(x)+1=4(9\cdot2^{N-3}w-5)$ with odd bracket; $8f^2(x)=9\cdot2^Nw-40
+=9x+5$. Fuel: $x+1=4(2^{N-2}w-1)$;
+$f(x)+1=2\cdot3(2^{N-2}w-1)$ with odd second factor;
+$f^2(x)+1=4(9\cdot2^{N-5}w-1)$ (odd bracket, $N\ge6$). Residues are
+immediate. Detectors: $x\equiv f^2(x)\equiv27$ and
+$f(x)\equiv25\pmod{32}$ (using $N-3\ge5$), and
+$27,25\notin\{1,9\}$; apply Lemma~\ref{lem:mod32}.
+\end{proof}
+
+\begin{theorem}[master no-go]\label{thm:A}
+Let $m,d\ge0$ and let $g$ be any real-valued function of
+$\bigl(x\bmod2^m,\ \tau(x),\ \bitlen(x),\
+\lambda_1(x),\dots,\lambda_d(x)\bigr)$. Then
+$\Phi(x)=\log_2x+g(\cdots)$ is not nonincreasing along $f$ on odd
+$x>1$.
+\end{theorem}
+
+\begin{proof}
+Take $N\ge\max(m+3,8)$, $k\ge3$, and $w=2^{k-1}+1$ in
+Lemma~\ref{lem:S}. Then additionally
+$\bitlen(x)=\bitlen(f^{2}(x))=N+k$, since $w$ places $x$ in the lower
+part of its dyadic window: $9(2^{k}+2)<2^{k+4}$. Hence
+$x$ and $f^{2}(x)$ have identical coordinate vectors while
+$f^{2}(x)>x$, and summing the two monotonicity constraints at $x$ and
+$f(x)$ gives
+$0\le-\log_2\bigl(f^{2}(x)/x\bigr)<-\log_2\tfrac98<0$.
+\end{proof}
+
+The smallest member ($N=8$, $k=3$) is
+$1275\mapsto1913\mapsto1435$, with $8\cdot1435=9\cdot1275+5$ and ratio
+product $\tfrac{287}{255}$: two integers refute every $g$ on the full
+coordinate algebra at $m\le5$.
+
+\begin{remark}[general principle]\label{rem:factories}
+Nothing is special about $-5$: every expanding rational cycle of the
+map --- every solution of the cycle equation with $2^{E}<3^{K}$, e.g.\
+the $K=7$ cycle at $-17$ with multiplier $3^{7}/2^{11}$ --- shadows at
+positive integers $\equiv$ (cycle member) $\bmod\ 2^{N}$ into a closed
+coordinate itinerary of value gain $3^{K}/2^{E}>1$, refuting every
+correction that is $2$-adically local along it. Expanding negative
+cycles are certificate factories against local potentials.
+\end{remark}
+
+\section{Iterating the shadow: leading digits}\label{sec:leading}
+
+A coordinate can defeat a single shadow period only by separating $x$
+from $f^{2}(x)=\tfrac98x+\tfrac58$; the leading digits do (the ratio
+$\tfrac98$ shifts them). Iteration removes this refuge.
+
+\begin{theorem}[leading digits do not survive]\label{thm:B}
+For every $m,j,d\ge0$ and every $g$, the potential
+$\log_2x+g\bigl(x\bmod2^m,\ \tau(x),\ \LD_j(x),\
+\lambda_1(x),\dots,\lambda_d(x)\bigr)$ is not nonincreasing along $f$
+on odd $x>1$.
+\end{theorem}
+
+\begin{proof}
+For $x\equiv-5\pmod{2^{\,3a+c}}$, $c\ge5$, Lemma~\ref{lem:S} applies
+$a$ times (each period consumes three bits of shadow depth), the
+itinerary alternating residues $-5,-7$ with fuel $2,1$ and every
+detector $\bot$ throughout, giving the exact closed form
+\[
+f^{2a}(x)=\frac{9^{a}x+5\,(9^{a}-8^{a})}{8^{a}}
+=\Bigl(\tfrac98\Bigr)^{a}x\,(1+\delta),\qquad 0<\delta<\tfrac5x .
+\]
+Now $\beta=\log_2\tfrac98$ is irrational ($2^{\,p+3q}=3^{\,2q}$ is
+impossible: $\vv_3$ of the sides differ), so by Dirichlet there is
+$a\ge1$ with $\|a\beta\|<2^{-j-3}$ (distance to the nearest integer
+$P$; note $a\beta>0$ regardless of the side). Choose
+$N=3a+\max(m,5)+j+8$ and a free odd multiplier $w$ placing the
+fractional part of $\log_2x$, $x=2^{N}w-5$, at distance $>2^{-j-2}$
+from every breakpoint of $\LD_j$ (possible since
+$\log_2(2^{N}w-5)\approx N+\log_2w$ and $\{\log_2w\}$ is dense), with
+$N$ large enough that $\log_2(1+\delta)<2^{-j-3}$. Then
+$\log_2f^{2a}(x)=\log_2x+P\pm\|a\beta\|+\log_2(1+\delta)$, so
+$\LD_j$ closes; all other coordinates close by the itinerary; and
+telescoping monotonicity over the $2a$-step walk gives
+$0\ge a\beta+\log_2(1+\delta)>0$.
+\end{proof}
+
+A concrete instance ($j=4$): $a=53$ gives $53\beta=9.0060\ldots$; the
+verifier realizes the full $106$-step walk in exact integers at depth
+$N=177$, with top-$4$ bits $\texttt{1011}\to\texttt{1011}$, all
+coordinates frozen, and value gain $2^{9.006}$.
+
+\section{Bounded corrections}\label{sec:bounded}
+
+\begin{theorem}[no bounded correction]\label{thm:C}
+Let $G:2\Z+1\to\R$ be any bounded function. Then $\log_2x+G(x)$ is not
+nonincreasing along $f$ on odd $x>1$.
+\end{theorem}
+
+\begin{proof}
+Let $\Omega=\sup G-\inf G$. Telescoping monotonicity over the burn of
+$2^{M}-1$ (Lemma~\ref{lem:fuse} iterated: $M-1$ steps, each of ratio
+$>\tfrac32$) forces $(M-1)\log_2\tfrac32\le\Omega$, false for
+$M>1+\Omega/\log_2\tfrac32$.
+\end{proof}
+
+Theorems A--C partition the correction landscape: bounded corrections
+fail on the burn alone; unbounded corrections through residues, fuel,
+length, leading digits, and suffix detectors of every depth fail on
+the shadow. Section~\ref{sec:boundary} describes what is left.
+
+\section{The Mersenne ancestry tower}\label{sec:tower}
+
+We now develop the structure behind the detectors. Define
+$w_0(M)=2^{M}-1$ and $w_d(M)$ as in \eqref{eq:wd}.
+
+\begin{theorem}\label{thm:D}
+For $d\ge1$ and $M\equiv1\pmod{\ord_d}$, $M>1$:
+\begin{enumerate}
+\item[(a)] \textup{(Domain.)} $3^{d}$ divides
+$2^{M+2d}-2^{2d+1}+3^{d}$ iff $M\equiv1\pmod{\ord_d}$.
+\item[(b)] \textup{(Form.)} $w_d(M)$ is an odd integer $>1$ with
+$\tau(w_d(M))=1$.
+\item[(c)] \textup{(Descent.)} $3\,w_d(M)+1=4\,w_{d-1}(M)$; hence
+$\vv_2(3w_d(M)+1)=2$, $f(w_d(M))=w_{d-1}(M)$, and
+$f^{d}(w_d(M))=2^{M}-1$, each step of value ratio
+$\tfrac34+\tfrac1{4w_d}\in(\tfrac34,1)$.
+\item[(d)] \textup{(Normal form.)} $B_d:=(2^{\ord_d}-1)/3^{d}$ is an
+integer in $(0,2^{\ord_d})$ by Lemma~\ref{lem:lte}, and for
+$M=1+\ord_d\,s$,
+\[
+w_d(M)=1+2^{2d+1}\cdot\bigl[\text{the $\ord_d$-bit block of
+}B_d\bigr]^{s},
+\]
+the bracket denoting $s$ carry-free repetitions: an exactly periodic
+binary word of period $2\cdot3^{d-1}$.
+\item[(e)] \textup{(Freeze and separation.)}
+$w_d(M)\equiv\Lambda_d:=1-2^{2d+1}3^{-d}\pmod{2^{\,M-1}}$; and for
+$d\ne d'$, $\vv_2(\Lambda_d-\Lambda_{d'})=2\min(d,d')+1$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+(a) Modulo $3^{d}$ the numerator is $2^{2d}(2^{M}-2)$, so divisibility
+is $2^{M-1}\equiv1\pmod{3^d}$; apply Lemma~\ref{lem:order}.
+(b) The second form in \eqref{eq:wd} is $1$ plus an even number, and
+$w_d+1=2(1+2^{2d}q)$ with $2^{2d}q$ even.
+(c) Clearing $3^{d-1}$, the identity reduces to
+$3^{d}+3^{d-1}=4\cdot3^{d-1}$; $w_{d-1}$ is odd, so $\vv_2=2$ exactly;
+iterate.
+(d) With $M-1=\ord_d\,s$,
+$(2^{M-1}-1)/3^{d}=B_d\sum_{i=0}^{s-1}2^{\ord_d i}$, a
+base-$2^{\ord_d}$ number all of whose digits equal $B_d<2^{\ord_d}$: no
+carries; the $+1$ and the shift by $2^{2d+1}$ cannot interact.
+(e) $3^{d}\cdot\tfrac{2^{M-1}-1}{3^{d}}\equiv-1\pmod{2^{M-1}}$; and for
+$d>d'$,
+$\Lambda_d-\Lambda_{d'}=2^{2d'+1}3^{-d}\bigl(3^{\,d-d'}-2^{\,2(d-d')}\bigr)$
+with odd bracket.
+\end{proof}
+
+Levels $0,1,2$ are the Mersennes, the family
+$x'_M=(2^{M+2}-5)/3=(\texttt{10})^{(M-3)/2}\texttt{1001}$ with
+$f(x'_M)=2^M-1$, and $(\texttt{111000})^{k}\texttt{01}$; the tower is
+the complete uniform-$e{=}2$ ancestry of maximal fuel, and every tower
+member lies on the residue class $8y+1$. Composing the tower with the
+burn (Remark~\ref{rem:andaloro}) yields, for each $(d,M)$, an exactly
+known orbit segment of length $d+M+1$ terminating on the base-$3$
+repunit $(3^{M}-1)/2$.
+
+\begin{lemma}\label{lem:detfacts}
+(1) $\lambda_d(T^{(d)}_s)=s$: the detector reads its own tower index,
+unboundedly. (2) For $d\ne d'$, with $\nu=2\min(d,d')+1$: for all
+$M>\nu+1$ in the level-$d$ progression,
+$\lambda_{d'}(w_d(M))\le\nu/\ord_{d'}$.
+\end{lemma}
+
+\begin{proof}
+(1) At index $s$ the congruence is an equality that holds; at $s'>s$
+the modulus exceeds both operands and templates strictly increase.
+(2) Suppose $w_d(M)$ matches $T^{(d')}_s$ with $M'=1+\ord_{d'}s$ and,
+toward a contradiction, $M'-1\ge\nu+1$. The matching modulus refines
+$2^{\nu+1}$ (as $\beta_{d'}(s)\ge M'$), so Theorem~\ref{thm:D}(e) on
+both sides forces $\Lambda_d\equiv\Lambda_{d'}\pmod{2^{\nu+1}}$,
+contradicting $\vv_2(\Lambda_d-\Lambda_{d'})=\nu$. Hence
+$\ord_{d'}s\le\nu$. (Small-index templates have not converged to
+$\Lambda_{d'}$; this affects which small values occur, not the bound.)
+\end{proof}
+
+\begin{remark}[the family method and the price list]\label{rem:price}
+Historically, Theorems A--C were first obtained for subclasses by a
+family method that yields quantitative structure the shadow does not.
+The \emph{burn} family $3^{j}2^{t}-1$ ascends at ratio $>\tfrac32$ per
+step with frozen residue $-1$ and $\lambda\equiv\bot$, forcing $g$ to
+grow at slope $\log_2\tfrac32$ along a coordinate line; the tower's
+$e{=}2$ chains cap the same values from above, each level costing one
+$\log_2\tfrac43$. The resulting price list --- each detector level buys
+a would-be potential exactly $\log_2\tfrac43$ of budget against an
+unbounded liability --- explains \emph{why} suffix information fails,
+while the shadow certificates prove \emph{that} it fails. The full
+family proofs are retained in the repository.
+\end{remark}
+
+\section{Certificates from raw orbits}\label{sec:certificates}
+
+The constraint system ``$\Phi$ nonincreasing'', restricted to any
+coordinate window, is a system of difference constraints
+$g(v)-g(u)\le-\log_2(f(x)/x)$ over observed steps with
+$u=\mathrm{coords}(x)$, $v=\mathrm{coords}(f(x))$; it is infeasible iff
+the coordinate graph contains a directed cycle whose product of
+value ratios exceeds $1$, and any such cycle is verifiable in exact
+rational arithmetic. Mining by Bellman--Ford over odd $x\le10^{6}$
+yields short certificates in every window we tested: the pair
+$57\mapsto43$, $27\mapsto41$ closes a $2$-cycle in
+$(x\bmod16,\tau)$-space with product $\tfrac{1763}{1539}>1$, refuting
+Theorem~\ref{thm:A}'s class at $m\le4$ in two lines; a $5$-cycle
+through $41\mapsto31=2^{5}-1$ does the same with the level-$1$ detector
+added. Inspection of mined witnesses at larger moduli revealed the
+$-5,-7$ residue pattern of Section~\ref{sec:shadow}. This pipeline is
+logically independent of every lemma in this paper --- it uses raw
+orbit steps only --- and would have refuted the theorems had a valid
+correction existed on the tested windows.
+
+\section{The boundary}\label{sec:boundary}
+
+What survives Theorem~\ref{thm:B} must see $\log_2x$ to a precision
+finer than every $\|a\beta\|$ --- integer and fractional parts jointly:
+the \emph{quantized full logarithm}. There, a closed certificate needs
+total gain in $(0,2^{-j})$, which pure shadows cannot supply
+($\beta>2^{-j}$ for $j\ge3$); any certificate must mix gain and loss
+segments, a connectivity question in the coordinate graph, minable per
+window but with no uniform construction known.
+
+\begin{question}
+Is there a nonincreasing potential of the form
+$\log_2x+g\bigl(\lfloor2^{j}\log_2x\rfloor,\ \tau(x),\
+x\bmod2^m\bigr)$ for some $j,m$? As $j\to\infty$ the class approaches
+arbitrary corrections, for which the existence of a monotone potential
+is conjecture-adjacent; the one-step no-go program has plausibly
+reached the point where further progress and the conjecture itself
+interact.
+\end{question}
+
+\begin{question}
+Do multi-step potentials (functions nonincreasing along $f^{k}$ for
+fixed $k$, or path-dependent accountings) admit analogous obstructions?
+The shadow supplies candidate constraints, since its $k$-step behaviour
+is exactly known; note that any $k$-step potential must in particular
+survive $k$ dividing $2a$ along the iterated shadow.
+\end{question}
+
+We also note what the results do \emph{not} say: nothing here bears on
+individual trajectories, densities of divergent orbits, or cycles. The
+theorems delimit a proof \emph{method}, not the dynamics.
+
+\section{Computational verification}\label{sec:verification}
+
+Every numbered claim is verified by scripts using exact integer and
+rational arithmetic (no floating point in any assertion): the shadow
+lemma over wide parameter ranges with detector evaluation at all nodes
+(\texttt{verify\_shadow.py}); the iterated shadow, the concrete
+Dirichlet instance $(m,j,a)=(6,4,53)$ at depth $N=177$, and the
+irrationality arithmetic (\texttt{verify\_leading\_digit.py}); the
+tower in all parts, including both directions of the domain criterion
+and the carry-free normal form
+(\texttt{verify\_tower.py}); the family-method subclasses
+(\texttt{verify\_no\_local\_potential.py}, \texttt{verify\_nlp2.py});
+and the independent certificate miner with exact cycle confirmation
+(\texttt{verify\_nogo\_certificate.py},
+\texttt{verify\_fuel\_fraction.py}). The scripts accompany the
+repository.
+
+\begin{thebibliography}{99}
+
+\bibitem{Andaloro2000}
+P.~Andaloro,
+\emph{On total stopping times under $3x+1$ iteration},
+Fibonacci Quart. \textbf{38} (2000), 73--78.
+
+\bibitem{Barina2021}
+D.~Barina,
+\emph{Convergence verification of the Collatz problem},
+J. Supercomputing \textbf{77} (2021), 2681--2688.
+
+\bibitem{Everett1977}
+C.~J. Everett,
+\emph{Iteration of the number-theoretic function $f(2n)=n$,
+$f(2n+1)=3n+2$},
+Adv. Math. \textbf{25} (1977), 42--45.
+
+\bibitem{KrasikovLagarias2003}
+I.~Krasikov and J.~C. Lagarias,
+\emph{Bounds for the $3x+1$ problem using difference inequalities},
+Acta Arith. \textbf{109} (2003), 237--258.
+
+\bibitem{Lagarias1985}
+J.~C. Lagarias,
+\emph{The $3x+1$ problem and its generalizations},
+Amer. Math. Monthly \textbf{92} (1985), 3--23.
+
+\bibitem{Lagarias2010}
+J.~C. Lagarias (ed.),
+\emph{The Ultimate Challenge: The $3x+1$ Problem},
+Amer. Math. Soc., Providence, RI, 2010.
+
+\bibitem{LagariasBibI}
+J.~C. Lagarias,
+\emph{The $3x+1$ problem: an annotated bibliography (1963--1999)},
+arXiv:math/0309224.
+
+\bibitem{LagariasBibII}
+J.~C. Lagarias,
+\emph{The $3x+1$ problem: an annotated bibliography, II (2000--2009)},
+arXiv:math/0608208.
+
+\bibitem{SimonsDeWeger2005}
+J.~Simons and B.~de Weger,
+\emph{Theoretical and computational bounds for $m$-cycles of the $3n+1$
+problem},
+Acta Arith. \textbf{117} (2005), 51--70.
+
+\bibitem{Steiner1977}
+R.~P. Steiner,
+\emph{A theorem on the Syracuse problem},
+Proc. 7th Manitoba Conference on Numerical Mathematics, 1977,
+553--559.
+
+\bibitem{Tao2022}
+T.~Tao,
+\emph{Almost all orbits of the Collatz map attain almost bounded
+values},
+Forum Math. Pi \textbf{10} (2022), e12.
+
+\bibitem{Terras1976}
+R.~Terras,
+\emph{A stopping time problem on the positive integers},
+Acta Arith. \textbf{30} (1976), 241--252.
+
+\bibitem{Wirsching1998}
+G.~J. Wirsching,
+\emph{The Dynamical System Generated by the $3n+1$ Function},
+Lecture Notes in Math. 1681, Springer, Berlin, 1998.
+
+\end{thebibliography}
+
+\end{document}
