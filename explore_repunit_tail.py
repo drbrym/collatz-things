@@ -145,8 +145,79 @@ def quiet_range_check(limit=2001, factor=3):
     )
 
 
+def extended_empirical_search(limit=20001, factor=3, checkpoint=2000, start=7):
+    """Scan an explicit odd-exponent range and report finite diagnostics."""
+    if start < 7 or start % 2 == 0 or limit < start or limit % 2 == 0:
+        raise ValueError("start and limit must be odd, with 7 <= start <= limit")
+
+    print(f"Extended empirical search: n = {start:,} to {limit:,} (odd)")
+    print(
+        f"{'n':>7} {'sigma':>7} {'ratio':>8} {'E_K':>6} "
+        f"{'raw_margin':>12} {'exact':>12} status"
+    )
+    print("-" * 85)
+
+    checked = 0
+    failures = []
+    records = []
+    worst = (0.0, None)
+    min_margin = (math.inf, None)
+
+    for n in range(start, limit + 1, 2):
+        target = 2 ** n - 1
+        rows = repunit_tail(n, max_factor=factor)
+        K, _e, E, raw_margin, exact_margin, x, _max_x = rows[-1]
+        checked += 1
+
+        if x >= target:
+            failures.append(n)
+            continue
+
+        ratio = K / n
+        status = ""
+        if ratio > worst[0]:
+            worst = (ratio, (n, K, E, raw_margin, exact_margin))
+            records.append(worst[1])
+            status = "*** NEW RECORD ***"
+        if exact_margin < min_margin[0]:
+            min_margin = (exact_margin, (n, K))
+
+        if status or (checkpoint and n > start and (n - 1) % checkpoint == 0):
+            print(
+                f"{n:7d} {K:7d} {ratio:8.5f} {E:6d} "
+                f"{raw_margin:12.4f} {exact_margin:12.6f} {status}"
+            )
+
+    print("-" * 85)
+    print(f"\nResults for n = {start:,} to {limit:,}:")
+    print(f"  Checked: {checked} odd values")
+    if worst[1] is not None:
+        n, K, _E, _raw, _exact = worst[1]
+        print(f"  Worst sigma/n = {worst[0]:.6f} at n={n} (sigma={K})")
+    if min_margin[1] is not None:
+        n, K = min_margin[1]
+        print(
+            f"  Smallest exact margin = {min_margin[0]:.6f} "
+            f"at n={n} (sigma={K})"
+        )
+    print(f"  Failures within {factor}n: {len(failures)}")
+    if failures:
+        print(f"  First failures: {failures[:10]}")
+    print(f"  Record-breaking exponents: {len(records)}")
+    print("\n  Record setters:")
+    for n, K, _E, _raw, exact_margin in records:
+        print(
+            f"    n={n:5d}: sigma={K:7d}, ratio={K / n:.6f}, "
+            f"exact_margin={exact_margin:.6f}"
+        )
+
+
 if __name__ == "__main__":
-    first_val_formula()
-    summary()
-    window_minima()
-    quiet_range_check()
+    import sys
+    if len(sys.argv) > 1 and sys.argv[1] == "extended":
+        extended_empirical_search(limit=20001, factor=3, checkpoint=2000)
+    else:
+        first_val_formula()
+        summary(limit=201)
+        window_minima(limit=201)
+        quiet_range_check(limit=2001)

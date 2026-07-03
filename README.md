@@ -100,6 +100,52 @@ is where the no-go program terminates.
 - [`mersenne_repunit_reduction.md`](mersenne_repunit_reduction.md)
   reduces the Mersenne trajectory after its closed-form burn to the
   base-\(3\) repunit \((3^n-1)/2\) for odd \(n\).
+- [`repunit_rail5_exact.md`](repunit_rail5_exact.md)
+  classifies the initial mod-\(8\) rails of odd-indexed base-\(3\) repunits,
+  proves that a natural-density \(5/8\) of the family reaches rail \(5\) on
+  step \(0\) or \(1\), and records a separate bounded \(12\)-step observation.
+- [`repunit_rail5_density.md`](repunit_rail5_density.md)
+  extends the \(5/8\) result to every fixed time: the density avoiding rail
+  \(5\) through step \(K\) is exactly
+  \(\frac12(3/4)^K\), so almost every odd-indexed repunit eventually reaches
+  rail \(5\).
+- [`repunit_rail5_survivor_geometry.md`](repunit_rail5_survivor_geometry.md)
+  identifies the infinite rail-\(5\) avoiders as a self-similar \(2\)-adic
+  Cantor set conjugate to the full shift on valuation symbols \(\{1,2\}\).
+  It has Haar measure zero and Hausdorff dimension
+  \(\log_2((1+\sqrt5)/2)\); the same dimension holds for the corresponding
+  repunit-index survivor set.
+- [`repunit_affine_tail_bound.md`](repunit_affine_tail_bound.md)
+  proves that the affine correction in the repunit-tail ledger is
+  exponentially small throughout every pre-descent linear window.
+- [`repunit_tail_merge_reduction.md`](repunit_tail_merge_reduction.md)
+- [`repunit_gap_merger_analysis.md`](repunit_gap_merger_analysis.md)
+- [`repunit_gap2_sync_tree.md`](repunit_gap2_sync_tree.md)
+- [`repunit_multigap_sync_union.md`](repunit_multigap_sync_union.md)
+- [`repunit_collision_defect_dynamics.md`](repunit_collision_defect_dynamics.md)
+  gives an exact diagonal-state merge criterion and a merge-inheritance
+  induction principle.
+- [`repunit_256_block_target.md`](repunit_256_block_target.md)
+  isolates a conditional 256-valuation floor which would prove descent of
+  every odd-indexed repunit tail.
+- [`repunit_low_prefix_obstruction.md`](repunit_low_prefix_obstruction.md)
+  constructs explicit low-valuation repunit prefixes, showing that any fixed
+  block-floor proof must use off-diagonal merging or a recovery mechanism.
+- [`repunit_baker_nonshadowing.md`](repunit_baker_nonshadowing.md)
+- [`repunit_baker_applicability_census.md`](repunit_baker_applicability_census.md)
+- [`repunit_enemy_episode_analysis.md`](repunit_enemy_episode_analysis.md)
+  proves that positive integer exponents cannot shadow the
+  \(3^{\alpha+1}=-7\) ghost branch for more than \(O(\log n)\) steps, via
+  Yu's \(p\)-adic Baker theorem.
+- [`repunit_extremal_principle.md`](repunit_extremal_principle.md)
+  gives an exact payout ledger and shell-ancestry expansion for record
+  valuation deficits, and isolates a primitive reachability lemma as the next
+  proof target.
+- [`repunit_run_length_identity.md`](repunit_run_length_identity.md)
+  proves the fuel-enemy bridge \(\tau(x_K)=v_2(3^{m_K}+d_K)-E_K-1\) and the
+  exact valuation-one run-length identity, unifying the burn, enemy-coordinate,
+  and deficit pictures; an accompanying factorization probe shows the dangerous
+  enemy constants are high-height rough primes.
 - [`Exponential_Decay_Potential.md`](Exponential_Decay_Potential.md)
   proves descent of a bounded bit-weight potential on one explicit
   recharge family. Its global failure is now a theorem (BND1), not just
@@ -143,12 +189,15 @@ The following statements are exhaustive only over their stated bounds:
 - Mined no-go certificates cover the tested coordinate windows over odd
   \(x\le2\cdot10^6\); the uniform theorems are carried by the shadow
   families, not by the mining.
+- Every tested odd-indexed repunit \(a_n\), \(3\le n\le199\), reaches rail
+  \(5\bmod8\) within at most 12 odd-steps.
 
 ## Proof targets and exploratory work
 
 These documents are useful research records but are not dependencies of
 the proved-results track:
 
+- [`entropy_nonshadowing_theory.md`](entropy_nonshadowing_theory.md) — alternative Entropy and Kolmogorov Complexity track.
 - [`descent_tree_survivors.md`](descent_tree_survivors.md) — exact spine
   anchor; its original Conjecture 1 is **refuted** and superseded by
   COR1–COR3.
@@ -159,14 +208,16 @@ the proved-results track:
   the repunit landing is unchanged by all of the above.
 - [`fuse_map_theory.md`](fuse_map_theory.md) and
   [`fuse_burn_attack.md`](fuse_burn_attack.md).
-- [`fusion_fracture_cycle.md`](fusion_fracture_cycle.md),
-  [`refractory_period_barrier.md`](refractory_period_barrier.md), and
-  [`recharge_density_inverse_law.md`](recharge_density_inverse_law.md).
-- [`Triple_Lock.md`](Triple_Lock.md) and
-  [`Triple_Lock_Revised.md`](Triple_Lock_Revised.md).
-- [`potential_attack_notes.md`](potential_attack_notes.md) — the
-  paired-macro program; note (SPN1) that macro net drift reduces to
-  \(\sigma(a_M)\).
+- [`martingale_logspace_perspective.md`](martingale_logspace_perspective.md) —
+  exact Haar-random valuation martingale, logarithmic drift, corrected
+  large-deviation rate function, and a carefully limited diffusion
+  approximation.
+- [`explore_martingale_repunit_drift.py`](explore_martingale_repunit_drift.py) —
+  verifier for the martingale formulas and exact valuation-pattern counts,
+  with a separately labelled fixed-window repunit diagnostic.
+- Archived thermodynamic heuristics under [`archive/`](archive/README.md):
+  fusion-fracture cycle, refractory-period barrier, recharge-density inverse
+  law, Triple Lock notes, and potential-attack notes.
 
 The parity-itinerary note
 [`Collatz_Parity_Fragility_Corrected.md`](Collatz_Parity_Fragility_Corrected.md)
@@ -174,6 +225,12 @@ is a rederivation of Terras (1976) / Everett (1977) parity-vector
 injectivity, restated for the unaccelerated map. It does **not** prove
 that trajectories cannot later merge, or that hypothetical cycles are
 metrically repelling.
+
+## Archive
+
+Superseded thermodynamic heuristics, legacy cycle summaries, and exploratory
+precursors are retained under [`archive/`](archive/README.md). They are
+historical records, not part of the maintained claim chain.
 
 ## Verification
 
@@ -203,6 +260,25 @@ python verify_mod8_rails.py
 python verify_recharge_nogo.py
 python verify_exponential_potential.py
 python verify_repunit_reduction.py
+python verify_repunit_rail5.py
+python verify_repunit_rail5_density.py
+python verify_repunit_rail5_survivor_geometry.py
+python verify_repunit_affine_tail.py
+python verify_repunit_tail_merges.py
+python verify_repunit_gap_mergers.py
+python explore_repunit_sync_tree.py --through-step 7 --max-total 24 --common-depth 24
+python verify_repunit_sync_union.py
+python verify_repunit_collision_defect.py
+python verify_repunit_256_block.py
+python verify_repunit_low_prefix.py
+python verify_repunit_baker_nonshadowing.py
+python explore_baker_applicability.py --limit 5001
+python explore_repunit_enemy_episodes.py --limit 10001 --min-run 1
+python verify_repunit_extremal_principle.py
+python explore_repunit_extremal_prefixes.py --limit 2001
+python verify_repunit_run_length.py --limit 201
+python explore_repunit_enemy_factorization.py --limit 4001 --bound 1000000
+python verify_entropy_balance.py
 python verify_cycle_reduction.py
 ```
 
@@ -221,13 +297,16 @@ Interpret the output according to the claim ledger:
 3. `shadow_certificate.md`
 4. `tower_theorem.md`
 5. `leading_digit_nogo.md`
-6. `corridor_rate.md`
-7. `spine_synthesis.md`
-8. `recharge_nogo.md`
-9. `Mod8_Rail_Descent.md`
-10. `mersenne_repunit_reduction.md`
-11. `stopping_time_density.md`
-12. `cycle_reduction.md`
+6. `Block_Fracture_Lemma.md`
+7. `corridor_rate.md`
+8. `spine_synthesis.md`
+9. `recharge_nogo.md`
+10. `Mod8_Rail_Descent.md`
+11. `mersenne_repunit_reduction.md`
+12. `repunit_rail5_exact.md`
+13. `repunit_rail5_density.md`
+14. `stopping_time_density.md`
+15. `cycle_reduction.md`
 
 ## Correction history (standard, not embarrassment)
 

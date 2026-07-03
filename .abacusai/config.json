@@ -1,0 +1,35 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cd /d D:\\Dev\\Git\\docbgm2002\\collatz-things && python explore_repunit_tail.py 2>&1 | tail -200)",
+      "Bash(cd D:\\Dev\\Git\\docbgm2002\\collatz-things && python explore_repunit_tail.py)",
+      "Bash(cd D:\\Dev\\Git\\docbgm2002\\collatz-things && python explore_repunit_tail.py 1>repunit_results.txt 2>&1)",
+      "Bash(if exist D:\\Dev\\Git\\docbgm2002\\collatz-things\\repunit_results.txt ( type D:\\Dev\\Git\\docbgm2002\\collatz-things\\repunit_re…)",
+      "Bash(for /f %%A in ('find /c /v \"\" ^< D:\\Dev\\Git\\docbgm2002\\collatz-things\\repunit_results.txt') do echo %%A lines)",
+      "Bash(ping -n 121 127.0.0.1 > nul && dir D:\\Dev\\Git\\docbgm2002\\collatz-things\\repunit_results.txt)",
+      "Bash(taskkill /PID 45632 /F)",
+      "Bash(cd D:\\Dev\\Git\\docbgm2002\\collatz-things && python explore_repunit_tail.py extended 1>repunit_extended.txt 2>&1)",
+      "Bash(ping -n 31 127.0.0.1 > nul && type D:\\Dev\\Git\\docbgm2002\\collatz-things\\repunit_extended.txt 2>&1 | findstr /c:\"Record\\|…)",
+      "Bash(ping -n 61 127.0.0.1 > nul && dir D:\\Dev\\Git\\docbgm2002\\collatz-things\\repunit_extended.txt)",
+      "Bash(taskkill /im python.exe /F 2>&1 | findstr \"python\")",
+      "Bash(cd D:\\Dev\\Git\\docbgm2002\\collatz-things && python -c \"\nimport math\n\nTHETA = math.log2(3)\nLAMBDA = math.log2(3 / 2)\n\ndef …)",
+      "Bash(cd D:\\Dev\\Git\\docbgm2002\\collatz-things && python -c \"\nimport math\n\ndef v2(n):\n    return (n & -n).bit_length() - 1 if n…)",
+      "Bash(cd D:\\Dev\\Git\\docbgm2002\\collatz-things && python -c \"print('hello')\")",
+      "Bash(cd D:\\Dev\\Git\\docbgm2002\\collatz-things && python -c \"\nimport math\n\ndef v2(n):\n    return (n & -n).bit_length() - 1 if n…)",
+      "Bash(cd D:\\Dev\\Git\\docbgm2002\\collatz-things && python test_quick.py)",
+      "Bash(cd D:\\Dev\\Git\\docbgm2002\\collatz-things && python extended_search_20k.py)",
+      "Bash(ping -n 151 127.0.0.1 > nul && tasklist | find /i \"extended\")",
+      "Bash(cd D:\\Dev\\Git\\docbgm2002\\collatz-things && python extended_search_20k.py >search_results.txt 2>&1)",
+      "Bash(cd D:\\Dev\\Git\\docbgm2002\\collatz-things && python extended_search_50k.py)",
+      "Bash(ping -n 181 127.0.0.1 > nul && tasklist | find /i \"python\")",
+      "Bash(cd D:\\Dev\\Git\\docbgm2002\\collatz-things && python fast_checkpoint_search.py 1>checkpoint_results.txt 2>&1)",
+      "Bash(ping -n 301 127.0.0.1 > nul && type D:\\Dev\\Git\\docbgm2002\\collatz-things\\checkpoint_results.txt)",
+      "Bash(ping -n 601 127.0.0.1 > nul && type D:\\Dev\\Git\\docbgm2002\\collatz-things\\checkpoint_results.txt)",
+      "Bash(cd D:\\Dev\\Git\\docbgm2002\\collatz-things && python explore_repunit_tight_margins.py --limit 20001 --top 15 --window 40)",
+      "Bash(cd D:\\Dev\\Git\\docbgm2002\\collatz-things && python explore_repunit_tight_margins.py --limit 8001 --top 12 --window 30)",
+      "Bash(cd D:\\Dev\\Git\\docbgm2002\\collatz-things && python explore_repunit_tight_margins.py --limit 20001 --top 20 --window 20)",
+      "Bash(cd D:\\Dev\\Git\\docbgm2002\\collatz-things && python explore_repunit_tight_margins.py --limit 20001 --top 20 --window 20 >t…)",
+      "Bash(cd D:\\Dev\\Git\\docbgm2002\\collatz-things && python explore_repunit_tight_margins.py --limit 101 --top 5 --window 5)"
+    ]
+  }
+}

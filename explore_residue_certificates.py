@@ -30,7 +30,11 @@ def try_residue_certificate(r, K, max_steps=200):
 
     for step in range(1, max_steps + 1):
         valuation = v2(3 * b + 1)
-        if valuation_budget + valuation > K:
+        # Equality is not enough to determine the exact valuation uniformly:
+        # the parameter term and constant term can cancel after division by
+        # 2^K.  One additional known bit is required to continue the affine
+        # accelerated trajectory without branching.
+        if valuation_budget + valuation >= K:
             return {
                 "status": "unresolved",
                 "reason": "need_more_bits",
